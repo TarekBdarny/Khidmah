@@ -1,0 +1,171 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String @id @default(cuid())
+  firstName   String
+  clerkId   String @unique
+  lastName    String
+  phoneNumber String @unique
+  profilePic  String?
+  email       String @unique
+  password    String
+  age         Int
+  role        Role   @default(CLIENT)
+  city        String
+
+  // Relations
+  worker        Worker?
+  request       WorkerRequest?
+  notifications Notification[]
+  workPosts     WorkPost[]     @relation("ClientPosts")
+  ratingsGiven  Rating[]       @relation("UserRatings")
+  savedWorkers  SavedWorkers[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Worker {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  offDays   String[] // e.g., ["Monday", "Wednesday"]
+  workHours Json // e.g., {"Sunday" : {"start": "09:00", "end": "17:00"}, ...}
+
+  yearsExperience Int?
+  availableToWork Boolean @default(true)
+  maxWorkDistance Int?
+
+  // Relations
+  ratings       Rating[]
+  previousWorks PreviousWork[]
+  attachments   String[] // URLs or file paths (PDFs)
+  experience    Category[]
+  applicants    WorkPost[]     @relation("JobApplicants")
+  savedByUsers  SavedWorkers[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Rating {
+  id       String  @id @default(cuid())
+  comment  String?
+  rate     Int // 1–5
+  raterId  String
+  workerId String
+
+  rater  User   @relation("UserRatings", fields: [raterId], references: [id])
+  worker Worker @relation(fields: [workerId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model WorkPost {
+  id          String    @id @default(cuid())
+  clientId    String
+  description String
+  startTime   DateTime?
+  deadline    DateTime?
+  payment     Float?
+  photos      String[]
+  location    String
+  isAvailable Boolean   @default(true)
+
+  client     User       @relation("ClientPosts", fields: [clientId], references: [id])
+  applicants Worker[]   @relation("JobApplicants")
+  categories Category[] @relation("WorkPostCategories")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PreviousWork {
+  id          String    @id @default(cuid())
+  workerId    String
+  location    String?
+  description String?
+  startTime   DateTime?
+  finishTime  DateTime?
+  photos      String[]
+
+  worker Worker @relation(fields: [workerId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  workers   Worker[]
+  workPosts WorkPost[] @relation("WorkPostCategories")
+}
+
+model WorkerRequest {
+  id          String        @id @default(cuid())
+  userId      String        @unique
+  status      RequestStatus @default(PENDING)
+  message     String?
+  attachments String[]
+  createdAt   DateTime      @default(now())
+  reviewedAt  DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String           @unique
+  title     String
+  message   String
+  type      NotificationType
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model SavedWorkers {
+  id        String   @id @default(cuid())
+  userId    String // the user who saved the worker
+  workerId  String // the worker who is saved
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  worker    Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, workerId])
+}
+
+enum NotificationType {
+  SYSTEM
+  CHAT
+  JOB
+  RATING
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+  WORKER
+}
