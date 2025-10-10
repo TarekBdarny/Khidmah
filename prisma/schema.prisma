@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -19,13 +18,14 @@ model User {
   firstName   String
   clerkId   String @unique
   lastName    String
-  phoneNumber String @unique
+  phoneNumber String? @unique
   profilePic  String?
   email       String @unique
-  password    String
-  age         Int
+  password    String?
+  age         Int?
+  hasCompletedProfile Boolean @default(false)
   role        Role   @default(CLIENT)
-  city        String
+  city        String?
 
   // Relations
   worker        Worker?
@@ -45,15 +45,15 @@ model Worker {
 
   offDays   String[] // e.g., ["Monday", "Wednesday"]
   workHours Json // e.g., {"Sunday" : {"start": "09:00", "end": "17:00"}, ...}
-
+  companyName String?
   yearsExperience Int?
   availableToWork Boolean @default(true)
   maxWorkDistance Int?
+  attachments   String[] // URLs or file paths (PDFs)
 
   // Relations
   ratings       Rating[]
   previousWorks PreviousWork[]
-  attachments   String[] // URLs or file paths (PDFs)
   experience    Category[]
   applicants    WorkPost[]     @relation("JobApplicants")
   savedByUsers  SavedWorkers[]
@@ -122,6 +122,13 @@ model WorkerRequest {
   status      RequestStatus @default(PENDING)
   message     String?
   attachments String[]
+  offDays   String[] // e.g., ["Monday", "Wednesday"]
+  workHours Json // e.g., {"Sunday" : {"start": "09:00", "end": "17:00"}, ...}
+  companyName String?
+
+  yearsExperience Int?
+  availableToWork Boolean @default(true)
+  maxWorkDistance Int?
   createdAt   DateTime      @default(now())
   reviewedAt  DateTime?
 
