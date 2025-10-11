@@ -1,5 +1,8 @@
 {
   "HomePage": {
     "title": "الصفحة الرئيسية"
+  },
+  "LocaleSwitcher": {
+    "label": "עברית"
   }
 }

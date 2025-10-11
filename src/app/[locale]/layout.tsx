@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { routing } from "@/i18n/routing";
+import NavbarWrapper from "@/components/navbars/NavbarWrapper";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,12 +31,18 @@ export default async function RootLayout({ children, params }: Props) {
     notFound();
   }
   return (
-    <html lang={locale}>
+    <html
+      lang={locale}
+      dir={locale !== "ar" && locale !== "he" ? "ltr" : "rtl"}
+    >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider>
-          <ClerkProvider>{children}</ClerkProvider>
+          <ClerkProvider>
+            <NavbarWrapper />
+            {children}
+          </ClerkProvider>
         </NextIntlClientProvider>
       </body>
     </html>

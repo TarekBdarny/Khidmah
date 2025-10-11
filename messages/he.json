@@ -1,5 +1,8 @@
 {
   "HomePage": {
     "title": "  הדף הראשי"
+  },
+  "LocaleSwitcher": {
+    "label": "العربية"
   }
 }
