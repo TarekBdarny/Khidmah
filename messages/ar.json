@@ -4,5 +4,34 @@
   },
   "LocaleSwitcher": {
     "label": "עברית"
+  },
+  "Navbar": {
+    "home": "الصفحة الرئيسية",
+    "about": "من نحن",
+    "findWorkers": "ابحث عن عمال",
+    "createWork": "أنشئ وظيفة",
+    "contact": "تواصل معنا"
+  },
+  "Sidebar": {
+    "mainMenu": "القائمة الرئيسية",
+    "home": "الصفحة الرئيسية",
+    "findWorkers": "ابحث عن عمال",
+    "addWork": "أضف وظيفة",
+    "myWorks": "وظائفي",
+    "dashboard": "لوحة التحكم",
+    "general": "عام",
+    "chats": "الرسائل",
+    "notifications": "الإشعارات",
+    "inbox": "البريد",
+    "profile": "الملف الشخصي",
+    "help": "مساعدة",
+    "FAQ": "الأسئلة الشائعة",
+    "contactUs": "تواصل معنا",
+    "aboutUs": "من نحن",
+    "settings": "الإعدادات",
+    "information": "معلومات",
+    "logout": "تسجيل الخروج",
+    "support": "الدعم",
+    "feedback": "ملاحظات"
   }
 }

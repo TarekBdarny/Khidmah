@@ -1,19 +1,25 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { Geist, Geist_Mono, Heebo, Noto_Sans, Tajawal } from "next/font/google";
+import "../globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { routing } from "@/i18n/routing";
 import NavbarWrapper from "@/components/navbars/NavbarWrapper";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { ThemeProvider } from "@/components/theme-provider";
+const tajawal = Tajawal({
+  subsets: ["arabic"],
+  weight: ["400", "500", "700"],
+  variable: "--font-arabic",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+// Hebrew font
+const heebo = Heebo({
+  subsets: ["hebrew"],
+  weight: ["400", "500", "700"],
+  variable: "--font-hebrew",
 });
 
 export const metadata: Metadata = {
@@ -34,16 +40,28 @@ export default async function RootLayout({ children, params }: Props) {
     <html
       lang={locale}
       dir={locale !== "ar" && locale !== "he" ? "ltr" : "rtl"}
+      suppressHydrationWarning
     >
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <NextIntlClientProvider>
-          <ClerkProvider>
-            <NavbarWrapper />
-            {children}
-          </ClerkProvider>
-        </NextIntlClientProvider>
+      <body className={`${tajawal.variable} ${heebo.variable} antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NextIntlClientProvider>
+            <ClerkProvider>
+              <SidebarProvider defaultOpen={false}>
+                <AppSidebar />
+                <main className="w-full min-h-screen">
+                  <NavbarWrapper />
+
+                  {children}
+                </main>
+              </SidebarProvider>
+            </ClerkProvider>
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -4,5 +4,34 @@
   },
   "LocaleSwitcher": {
     "label": "العربية"
+  },
+  "Navbar": {
+    "home": "הדף הראשי",
+    "about": "אודותינו",
+    "findWorkers": "חפש עובדים",
+    "createWork": "צור משרה",
+    "contact": "צור קשר"
+  },
+  "Sidebar": {
+    "mainMenu": "תפריט ראשי",
+    "home": "הדף הראשי",
+    "dashboard": "לוח בקרה",
+    "profile": "פרופיל",
+    "settings": "הגדרות",
+    "information": "מידע",
+    "general": "כללי",
+    "logout": "התנתק",
+    "findWorkers": "חפש עובדים",
+    "addWork": "הוסף משרה",
+    "myWorks": "המשרות שלי",
+    "inbox": "תיבת דואר",
+    "notifications": "התראות",
+    "chats": "צ'אטים",
+    "FAQ": "שאלות נפוצות",
+    "contactUs": "צור קשר",
+    "aboutUs": "אודותינו",
+    "help": "עזרה",
+    "support": "תמיכה",
+    "feedback": "משוב"
   }
 }

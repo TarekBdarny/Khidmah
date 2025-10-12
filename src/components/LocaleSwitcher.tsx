@@ -20,7 +20,7 @@ const LocaleSwitcher = () => {
   const t = useTranslations("LocaleSwitcher");
   return (
     <Button
-      variant={"outline"}
+      variant={"ghost"}
       onClick={() => handleSwitch(locale === "ar" ? "he" : "ar")}
     >
       <LanguagesIcon />

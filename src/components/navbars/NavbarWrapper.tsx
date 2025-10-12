@@ -4,7 +4,7 @@ import DesktopNavbar from "./DesktopNavbar";
 
 const NavbarWrapper = () => {
   return (
-    <div>
+    <div className="">
       <div className="hidden md:block">
         <DesktopNavbar />
       </div>
