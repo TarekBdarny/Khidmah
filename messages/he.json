@@ -32,6 +32,8 @@
     "aboutUs": "אודותינו",
     "help": "עזרה",
     "support": "תמיכה",
-    "feedback": "משוב"
+    "feedback": "משוב",
+    "welcome": "ברוך הבא,",
+    "welcomeBack": "ברוך שובך!"
   }
 }

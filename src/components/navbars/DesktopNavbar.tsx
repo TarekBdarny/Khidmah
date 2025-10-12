@@ -1,30 +1,8 @@
-import Link from "next/link";
 import React from "react";
 import { SidebarTrigger } from "../ui/sidebar";
 import { useTranslations } from "next-intl";
-import { UserButton } from "@clerk/nextjs";
-import { ThemeProvider } from "../theme-provider";
-import ThemeSwitcher from "../ThemeSwitcher";
 import LocaleSwitcher from "../LocaleSwitcher";
-import {
-  Home,
-  Users,
-  Briefcase,
-  DollarSign,
-  Info,
-  Phone,
-  Mail,
-  Bell,
-  MessageSquare,
-  Settings,
-  Search,
-  Menu,
-  X,
-  ChevronDown,
-  Globe,
-  LogOut,
-  User,
-} from "lucide-react";
+import { Briefcase, Bell, MessageSquare, Search } from "lucide-react";
 import { ProfileDropdownMenu } from "../reuseable/dropdown/ProfileDropdown";
 const DesktopNavbar = () => {
   const t = useTranslations("Navbar");

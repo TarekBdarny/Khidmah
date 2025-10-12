@@ -32,6 +32,8 @@
     "information": "معلومات",
     "logout": "تسجيل الخروج",
     "support": "الدعم",
-    "feedback": "ملاحظات"
+    "feedback": "ملاحظات",
+    "welcome": "مرحبًا بك,",
+    "welcomeBack": "مرحبًا بعودتك!"
   }
 }

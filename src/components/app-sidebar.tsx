@@ -1,7 +1,7 @@
+"use client";
 import {
   Bell,
   Briefcase,
-  Calendar,
   Headphones,
   Home,
   Inbox,
@@ -10,8 +10,6 @@ import {
   MessageCircleDashed,
   MessageSquare,
   Phone,
-  Search,
-  Settings,
   Users,
   Wrench,
 } from "lucide-react";
@@ -25,37 +23,57 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import SidebarIconTooltip, {
+  GreetingHeader,
+  SidebarContentItems,
+} from "./SidebarIconTooltip";
+import { SignedIn } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 // Menu items.
 
 export function AppSidebar() {
   const t = useTranslations("Sidebar");
+  const { isMobile } = useSidebar();
+  const pathname = usePathname();
+  const [activeLink, setActiveLink] = useState<string>(pathname || "/");
+  useEffect(() => {
+    const wantedSegment = pathname.split("/")[2];
+    setActiveLink(wantedSegment === undefined ? "/" : wantedSegment);
+  }, [pathname]);
   const mainMenuItems = [
     {
+      id: "/",
       title: t("home"),
       url: "/",
       icon: Home,
     },
     {
+      id: "findWorkers",
       title: t("findWorkers"),
-      url: "/find-workers",
+      url: "/findWorkers",
       icon: Users,
     },
     {
+      id: "addWork",
       title: t("addWork"),
       url: "#",
       icon: Wrench,
     },
     {
+      id: "myWorks",
       title: t("myWorks"),
       url: "#",
       icon: Briefcase,
     },
     {
+      id: "dashboard",
       title: t("dashboard"),
       url: "#",
       icon: LayoutDashboard,
@@ -64,16 +82,19 @@ export function AppSidebar() {
 
   const generalItems = [
     {
+      id: "inbox",
       title: t("inbox"),
       url: "#",
       icon: Inbox,
     },
     {
+      id: "notifications",
       title: t("notifications"),
       url: "#",
       icon: Bell,
     },
     {
+      id: "chats",
       title: t("chats"),
       url: "#",
       icon: MessageSquare,
@@ -82,37 +103,50 @@ export function AppSidebar() {
 
   const informationItems = [
     {
+      id: "aboutUs",
       title: t("aboutUs"),
       url: "#",
       icon: Info,
     },
     {
+      id: "contactUs",
       title: t("contactUs"),
       url: "#",
       icon: Phone,
     },
     {
+      id: "support",
       title: t("support"),
       url: "#",
       icon: Headphones,
     },
     {
+      id: "feedback",
       title: t("feedback"),
       url: "#",
       icon: MessageCircleDashed,
     },
   ];
   return (
-    <Sidebar side="right" collapsible="icon">
+    <Sidebar side="right" collapsible={isMobile ? "none" : "icon"}>
+      <SignedIn>
+        <GreetingHeader name="Tarek" />
+      </SignedIn>
       <SidebarContent className="mt-16">
-        <SidebarContentItems label={t("mainMenu")} items={mainMenuItems} />
+        <SidebarContentItems
+          label={t("mainMenu")}
+          items={mainMenuItems}
+          pathSegment={activeLink}
+        />
         <SidebarContentItems
           label={t("general")}
           items={generalItems}
+          pathSegment={activeLink}
           addBadge
         />
         <SidebarContentItems
           label={t("information")}
+          pathSegment={activeLink}
           items={informationItems}
         />
       </SidebarContent>
@@ -120,30 +154,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-
-type Props = {
-  label: string;
-  addBadge?: boolean;
-  items: { title: string; url: string; icon: React.ComponentType }[];
-};
-const SidebarContentItems = ({ label, items, addBadge = false }: Props) => {
-  return (
-    <SidebarGroup>
-      <SidebarGroupLabel>{label}</SidebarGroupLabel>
-      <SidebarGroupContent>
-        <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild>
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
-  );
-};

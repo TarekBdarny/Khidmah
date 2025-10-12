@@ -5,10 +5,10 @@ import DesktopNavbar from "./DesktopNavbar";
 const NavbarWrapper = () => {
   return (
     <div className="">
-      <div className="hidden md:block">
+      <div className="hidden lg:block">
         <DesktopNavbar />
       </div>
-      <div className="block md:hidden">
+      <div className="block lg:hidden">
         <MobileNavbar />
       </div>
     </div>
