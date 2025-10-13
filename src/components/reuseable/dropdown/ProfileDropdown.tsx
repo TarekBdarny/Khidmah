@@ -17,6 +17,7 @@ import ProfilePicture from "../avatar/ProfilePicture";
 import { LogOut, Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { SignOutButton } from "@clerk/nextjs";
 
 export function ProfileDropdownMenu() {
   return (
@@ -44,8 +45,12 @@ export function ProfileDropdownMenu() {
         </Link>
 
         <DropdownMenuItem className={`cursor-pointer hover:text-red-400 `}>
-          <LogOut size={18} className="ml-2" />
-          تسجيل الخروج
+          <SignOutButton>
+            <Button>
+              <LogOut size={18} className="ml-2" />
+              تسجيل الخروج
+            </Button>
+          </SignOutButton>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

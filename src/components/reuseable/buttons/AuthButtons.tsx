@@ -13,36 +13,29 @@ import {
   SignUpButton,
 } from "@clerk/nextjs";
 import React from "react";
-const tempObject = {
-  offDays: ["Saturday", "Sunday"],
-  maxWorkDistance: 50,
-  yearsExperience: 5,
-  attachments: [],
-  message: "Looking forward to working with you!",
-  userId: "cmgh2b4w80000ug9kreqr0vjd", // Replace with actual Clerk user ID
-  workHours: {
-    Monday: { start: "09:00", end: "17:00" },
-    Tuesday: { start: "09:00", end: "17:00" },
-    Wednesday: { start: "09:00", end: "17:00" },
-  },
+import { ProfileDropdownMenu } from "../dropdown/ProfileDropdown";
+type AuthProps = {
+  useCase: "navbar" | "homepage";
 };
-const AuthButtons = () => {
-  return (
+const AuthButtons = ({ useCase }: AuthProps) => {
+  return useCase === "navbar" ? (
     <div>
       <SignedIn>
-        <p>You are signed in!</p>
-        <SignOutButton />
+        <ProfileDropdownMenu />
       </SignedIn>
       <SignedOut>
-        <p>You are not logged in!</p>
-        <SignInButton>
-          <Button>Sign In</Button>
-        </SignInButton>
-        <SignUpButton>
-          <Button>Sign Up</Button>
-        </SignUpButton>
+        <div className="flex items-center gap-2">
+          <Button asChild variant={"outline"}>
+            <SignUpButton mode="modal">Sign Up</SignUpButton>
+          </Button>
+          <Button asChild variant={"action"}>
+            <SignInButton mode="modal">Sign In</SignInButton>
+          </Button>
+        </div>
       </SignedOut>
     </div>
+  ) : (
+    <div></div>
   );
 };
 

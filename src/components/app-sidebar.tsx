@@ -7,9 +7,11 @@ import {
   Inbox,
   Info,
   LayoutDashboard,
+  LogOut,
   MessageCircleDashed,
   MessageSquare,
   Phone,
+  Settings,
   Users,
   Wrench,
 } from "lucide-react";
@@ -32,7 +34,8 @@ import Link from "next/link";
 import SidebarIconTooltip, {
   GreetingHeader,
   SidebarContentItems,
-} from "./SidebarIconTooltip";
+  SidebarFooterItems,
+} from "./SidebarHelpers";
 import { SignedIn } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -51,31 +54,31 @@ export function AppSidebar() {
     {
       id: "/",
       title: t("home"),
-      url: "/",
+      href: "/",
       icon: Home,
     },
     {
       id: "findWorkers",
       title: t("findWorkers"),
-      url: "/findWorkers",
+      href: "/findWorkers",
       icon: Users,
     },
     {
       id: "addWork",
       title: t("addWork"),
-      url: "#",
+      href: "#",
       icon: Wrench,
     },
     {
       id: "myWorks",
       title: t("myWorks"),
-      url: "#",
+      href: "#",
       icon: Briefcase,
     },
     {
       id: "dashboard",
       title: t("dashboard"),
-      url: "#",
+      href: "#",
       icon: LayoutDashboard,
     },
   ];
@@ -84,19 +87,19 @@ export function AppSidebar() {
     {
       id: "inbox",
       title: t("inbox"),
-      url: "#",
+      href: "#",
       icon: Inbox,
     },
     {
       id: "notifications",
       title: t("notifications"),
-      url: "#",
+      href: "#",
       icon: Bell,
     },
     {
       id: "chats",
       title: t("chats"),
-      url: "#",
+      href: "#",
       icon: MessageSquare,
     },
   ];
@@ -105,30 +108,45 @@ export function AppSidebar() {
     {
       id: "aboutUs",
       title: t("aboutUs"),
-      url: "#",
+      href: "#",
       icon: Info,
     },
     {
       id: "contactUs",
       title: t("contactUs"),
-      url: "#",
+      href: "#",
       icon: Phone,
     },
     {
       id: "support",
       title: t("support"),
-      url: "#",
+      href: "#",
       icon: Headphones,
     },
     {
       id: "feedback",
       title: t("feedback"),
-      url: "#",
+      href: "#",
       icon: MessageCircleDashed,
     },
   ];
+  const footerItems = [
+    {
+      id: "settings",
+      title: t("settings"),
+      href: "/settings",
+      icon: Settings,
+    },
+    {
+      id: "logout",
+      title: t("logout"),
+      href: "#",
+      icon: LogOut,
+    },
+  ];
   return (
-    <Sidebar side="right" collapsible={isMobile ? "none" : "icon"}>
+    <Sidebar side="right">
+      {/* collapsible={isMobile ? "none" : "icon"} */}
       <SignedIn>
         <GreetingHeader name="Tarek" />
       </SignedIn>
@@ -150,7 +168,13 @@ export function AppSidebar() {
           items={informationItems}
         />
       </SidebarContent>
-      <SidebarFooter>Footer</SidebarFooter>
+      <SidebarFooter>
+        <SidebarFooterItems
+          label={t("personal")}
+          pathSegment={activeLink}
+          items={footerItems}
+        />
+      </SidebarFooter>
     </Sidebar>
   );
 }

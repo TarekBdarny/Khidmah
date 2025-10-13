@@ -1,11 +1,17 @@
+"use client";
 import React from "react";
 import { SidebarTrigger } from "../ui/sidebar";
 import { useTranslations } from "next-intl";
 import LocaleSwitcher from "../LocaleSwitcher";
 import { Briefcase, Bell, MessageSquare, Search } from "lucide-react";
 import { ProfileDropdownMenu } from "../reuseable/dropdown/ProfileDropdown";
+import AuthButtons from "../reuseable/buttons/AuthButtons";
+import { Button } from "../ui/button";
+import ThemeSwitcher from "../ThemeSwitcher";
+import { useIsMobile } from "@/hooks/use-mobile";
 const DesktopNavbar = () => {
   const t = useTranslations("Navbar");
+  const isMobile = useIsMobile();
   const links = [
     {
       label: t("home"),
@@ -29,28 +35,7 @@ const DesktopNavbar = () => {
     },
   ];
   return (
-    // <header className=" px-4 py-4 rounded-lg shadow-sm w-full my-2 border-1 ">
-    //   <nav className="px-4 flex items-center justify-between w-full">
-    //     <ul className="flex items-center gap-6 list-none ">
-    //       <li className="hover:cursor-pointer">
-    //         <SidebarTrigger />
-    //       </li>
-    //       {links.map((link, i) => (
-    //         <li key={i} className="relative">
-    //           <Link href={link.href} className="listItem">
-    //             {link.label}
-    //           </Link>
-    //         </li>
-    //       ))}
-    //     </ul>
-    //     <div className="flex items-center gap-4">
-    //       <LocaleSwitcher />
-    //       <ThemeSwitcher />
-    //       <UserButton />
-    //     </div>
-    //   </nav>
-    // </header>
-    <header className=" border-b  sticky top-0 z-50 shadow-sm">
+    <header className=" border-b  sticky top-0 bg-background z-50 shadow-sm pl-3 ">
       <div className="flex items-center justify-between h-16 px-4">
         {/* Right Side - Menu Toggle & Logo */}
         <div className="flex items-center gap-4">
@@ -59,43 +44,33 @@ const DesktopNavbar = () => {
             <div className="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center">
               <Briefcase size={18} />
             </div>
-            <span className="font-bold text-lg hidden sm:block">WorkHub</span>
+            <span className="font-bold text-lg hidden sm:block">Khidma</span>
           </div>
         </div>
 
-        {/* Center - Search Bar */}
-        <div className="flex-1 max-w-2xl mx-4 hidden md:block">
-          <div className="relative">
-            <Search
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 "
-              size={18}
-            />
-            <input
-              type="text"
-              placeholder="ابحث عن عمال، وظائف..."
-              className="w-full pr-10 pl-4 py-2 border  rounded-lg focus:outline-none focus:ring-2  focus:border-transparent focus:ring-primary"
-            />
-          </div>
-        </div>
+        {/* center - main actions buttons */}
 
         {/* Left Side - Actions & Profile */}
         <div className="flex items-center gap-4">
           <LocaleSwitcher />
 
+          <ThemeSwitcher />
           {/* Notifications */}
-          <button className="p-2  rounded-lg transition-colors relative">
-            <Bell size={20} />
-            <span className="absolute top-1 left-1 w-2 h-2 bg-red-500 rounded-full"></span>
-          </button>
+          {!isMobile && (
+            <Button variant={"ghost"} className=" relative hover:scale-105">
+              <Bell size={20} />
+              <span className="absolute top-1 left-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </Button>
+          )}
 
           {/* Messages */}
-          <button className="p-2  rounded-lg transition-colors relative">
+          <Button variant={"ghost"} className="p-2 hover:scale-105 relative">
             <MessageSquare size={20} />
             <span className="absolute top-1 left-1 w-2 h-2 bg-red-500 rounded-full"></span>
-          </button>
+          </Button>
 
           {/* Profile Dropdown */}
-          <ProfileDropdownMenu />
+          <AuthButtons useCase="navbar" />
         </div>
       </div>
     </header>

@@ -34,6 +34,53 @@
     "support": "תמיכה",
     "feedback": "משוב",
     "welcome": "ברוך הבא,",
-    "welcomeBack": "ברוך שובך!"
+    "welcomeBack": "ברוך שובך!",
+    "personal": "אישי"
+  },
+  "HeroSection": {
+    "title": "מצא את העובדים הטובים ביותר לפרויקט שלך",
+    "subtitle": "משרברבים לחשמלאים, יש לנו את כל מה שאתה צריך.",
+    "searchPlaceholder": "חפש עובדים...",
+    "searchButton": "חפש עכשיו",
+    "filterButton": "סנן",
+    "popularSearch": "חיפושים פופולריים:",
+    "plumber": "שרברב",
+    "electrician": "חשמלאי",
+    "carpenter": "נגר",
+    "painter": "צבעי",
+    "cleaner": "מנקה",
+    "HeroHeader": "מצא את העובדים הטובים ביותר לפרויקט שלך",
+    "HeroSubheader": "אנו מספקים לך את בעלי המלאכה והעובדים המיומנים הטובים ביותר בכל התחומים"
+  },
+  "AvailableCategories": {
+    "title": "קטגוריות זמינות",
+    "electricity": "חשמל",
+    "plumbing": "שרברב",
+    "carpentry": "נגר",
+    "painting": "צבע",
+    "cleaning": "מנקה",
+    "building": "בניין",
+    "electricityDesc": "חשמלאיים מורחבים ומאושרים",
+    "plumbingDesc": "שרברבים מוכרים ומורחבים לכל אחזקתכם",
+    "carpentryDesc": "נגרים מוכרים ומורחבים לכל אחזקתכם",
+    "paintingDesc": "צבעי מוכרים ומורחבים לכל אחזקתכם",
+    "buildingDesc": "עובדים בניין מוכרים ומורחבים לכל אחזקתכם",
+    "cleaningDesc": "שירותי מנקה מורחבים ומורחבים לכל אחזקתכם"
+  },
+  "WhyToChooseUs": {
+    "title": "למה לבחור בנו",
+    "subtitle": "אנחנו מספקים לך את העובדים והאומנים הטובים ביותר בכל התחומים",
+    "trustworthyWorkers": "עובדים מוסמכים",
+    "trustworthyWorkersDesc": "כל העובדים שלנו נבדקו ואומתו בקפידה מבחינת הכישורים שלהם",
+    "honestReviews": "ביקורות אמינות",
+    "honestReviewsDesc": "מערכת דירוג שקופה מלקוחות אמיתיים",
+    "securePayment": "תשלומים מאובטחים",
+    "securePaymentDesc": "מערכת תשלום מאובטחת לפרויקטים",
+    "easyReservation": "קלות הזמנה",
+    "easyReservationDesc": "הזמן את השירות בלחיצה אחת",
+    "qualityService": "שירות איכותי",
+    "qualityServiceDesc": "תגובה מיידית ושירות בזמן",
+    "qualityAssurance": "אחריות על איכות",
+    "qualityAssuranceDesc": "אנחנו מבטיחים לך עבודה איכותית ושביעות רצון מלאה"
   }
 }

@@ -4,7 +4,12 @@ import createMiddleware from "next-intl/middleware";
 
 const intlMiddleware = createMiddleware(AppConfig);
 
-const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)", "/"]);
+const isPublicRoute = createRouteMatcher([
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/ar",
+  "/he",
+]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {

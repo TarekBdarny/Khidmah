@@ -21,7 +21,7 @@ type SidebarContentProps = {
   items: {
     id: string;
     title: string;
-    url: string;
+    href: string;
     icon: React.ComponentType;
   }[];
 };
@@ -42,12 +42,12 @@ export const SidebarContentItems = ({
               className={`
             ${
               pathSegment === item.id
-                ? "bg-accent/50 text-primary font-semibold"
+                ? "bg-accent/50 text-primary font-semibold rounded-md"
                 : ""
             }`}
             >
               <SidebarMenuButton asChild>
-                <Link href={item.url}>
+                <Link href={item.href}>
                   <SidebarIconTooltip
                     title={item.title}
                     IconComponent={item.icon}
@@ -61,6 +61,45 @@ export const SidebarContentItems = ({
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
+  );
+};
+export const SidebarFooterItems = ({
+  label,
+  items,
+  pathSegment,
+  addBadge = false,
+}: SidebarContentProps) => {
+  return (
+    <SidebarMenu>
+      <SidebarGroupLabel>{label}</SidebarGroupLabel>
+      <SidebarMenu>
+        {items.map((item) => (
+          <SidebarMenuItem
+            key={item.title}
+            className={`
+            ${
+              pathSegment === item.id
+                ? "bg-accent/50 text-primary font-semibold"
+                : ""
+            }`}
+          >
+            <SidebarMenuButton asChild>
+              <Link
+                href={item.href}
+                className={`${item.id === "logout" ? "text-red-400" : ""}`}
+              >
+                <SidebarIconTooltip
+                  title={item.title}
+                  IconComponent={item.icon}
+                />
+                {/* <item.icon /> */}
+                <span>{item.title}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    </SidebarMenu>
   );
 };
 
