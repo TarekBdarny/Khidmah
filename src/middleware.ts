@@ -9,9 +9,18 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
   "/ar",
   "/he",
+  "/",
+  "/api(.*)",
+  "/becomeWorker",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
+  if (req.nextUrl.pathname.startsWith("/api")) {
+    if (!isPublicRoute(req)) {
+      await auth.protect();
+    }
+    return; // Don't apply intl middleware to API routes
+  }
   if (!isPublicRoute(req)) {
     await auth.protect();
   }

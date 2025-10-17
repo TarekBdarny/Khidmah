@@ -17,39 +17,53 @@ import ProfilePicture from "../avatar/ProfilePicture";
 import { LogOut, Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { SignOutButton } from "@clerk/nextjs";
+import { SignOutButton, useAuth } from "@clerk/nextjs";
+import { getAuthUser } from "@/actions/user.action";
+import useAuthUser from "@/hooks/use-authUser";
+import { useTranslations } from "next-intl";
 
 export function ProfileDropdownMenu() {
+  const t = useTranslations("ProfileDropDown");
+  const authUser = useAuthUser();
+  const fallback =
+    `${authUser?.firstName?.charAt(0).toUpperCase()}
+  ${authUser?.firstName?.charAt(0).toUpperCase()}` || "";
+
   return (
     <DropdownMenu dir="rtl">
       <DropdownMenuTrigger className="cursor-pointer">
-        <ProfilePicture />
+        <ProfilePicture
+          profilePic={authUser?.profilePic || ""}
+          fallback={fallback}
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>أحمد محمد </DropdownMenuLabel>
-        <DropdownMenuItem>example@gmail.com</DropdownMenuItem>
+        <DropdownMenuLabel>
+          {authUser?.firstName} {authUser?.lastName}
+        </DropdownMenuLabel>
+        <DropdownMenuItem>{authUser?.email}</DropdownMenuItem>
         <DropdownMenuSeparator />
 
         <Link href={"/profile"}>
           <DropdownMenuItem className={`cursor-pointer`}>
             <User size={18} className="ml-2" />
-            الملف الشخصي
+            {t("profile")}
           </DropdownMenuItem>
         </Link>
 
         <Link href={"/settings"}>
           <DropdownMenuItem className={`cursor-pointer`}>
             <Settings size={18} className="ml-2" />
-            الإعدادات
+            {t("settings")}
           </DropdownMenuItem>
         </Link>
 
         <DropdownMenuItem className={`cursor-pointer hover:text-red-400 `}>
           <SignOutButton>
-            <Button>
+            <div className="w-full h-full flex items-center">
               <LogOut size={18} className="ml-2" />
-              تسجيل الخروج
-            </Button>
+              {t("logout")}
+            </div>
           </SignOutButton>
         </DropdownMenuItem>
       </DropdownMenuContent>

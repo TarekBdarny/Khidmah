@@ -1,11 +1,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from "react";
 
-const ProfilePicture = () => {
+type profileProps = {
+  profilePic: string;
+  fallback: string;
+};
+const ProfilePicture = ({ profilePic, fallback }: profileProps) => {
   return (
     <Avatar>
-      <AvatarImage src="https://github.com/shadcn.png" />
-      <AvatarFallback>CN</AvatarFallback>
+      <AvatarImage src={profilePic} />
+      <AvatarFallback>{fallback}</AvatarFallback>
     </Avatar>
   );
 };

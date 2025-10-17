@@ -12,6 +12,11 @@
     "createWork": "צור משרה",
     "contact": "צור קשר"
   },
+  "ProfileDropDown": {
+    "profile": "פרופיל",
+    "settings": "הגדרות",
+    "logout": "התנתק"
+  },
   "Sidebar": {
     "mainMenu": "תפריט ראשי",
     "home": "הדף הראשי",
@@ -38,8 +43,11 @@
     "personal": "אישי"
   },
   "HeroSection": {
-    "title": "מצא את העובדים הטובים ביותר לפרויקט שלך",
-    "subtitle": "משרברבים לחשמלאים, יש לנו את כל מה שאתה צריך.",
+    "badge": "🛠️ עובדים מקומיים",
+    "header": "שכור עובדים אמינים לכל סוג עבודה",
+    "subheader": "התחבר למומחים מאומתים לניקיון, תיקונים, ושיפוצים — מהר, בביטחון ובקלות במקום אחד.",
+    "getStarted": "התחל עכשיו",
+    "joinOurWorkers": "הצטרף לעובדים שלנו",
     "searchPlaceholder": "חפש עובדים...",
     "searchButton": "חפש עכשיו",
     "filterButton": "סנן",
@@ -82,5 +90,39 @@
     "qualityServiceDesc": "תגובה מיידית ושירות בזמן",
     "qualityAssurance": "אחריות על איכות",
     "qualityAssuranceDesc": "אנחנו מבטיחים לך עבודה איכותית ושביעות רצון מלאה"
+  },
+  "EmptyComponent": {
+    "workerTitle": "אתה כבר עובד",
+    "workerDescription": "החשבון שלך כבר רשום כעובד. יש לך גישה מלאה לכל תכונות העובד ואתה יכול להתחיל לקבל משרות באופן מיידי.",
+    "workerBadge": "מצב עובד פעיל",
+    "workerDashboard": "לוח בקרה",
+    "workerProfile": "פרופיל",
+    "adminTitle": "אתה כבר מנהל",
+    "adminDescription": "החשבון שלך כבר רשום כמנהל. יש לך גישה מלאה לכל תכונות הניהול ואתה יכול להתחיל לקבל בקשות ולנהל משתמשים באופן מיידי.",
+    "adminBadge": "סטטוס מנהל פעיל",
+    "helpDesc": "זקוק לעזרה או יש לך שאלות בנוגע לחשבון שלך?",
+    "contactSupport": "צור קשר עם התמיכה"
+  },
+  "BecomeWorkerForm": {
+    "title": "הפוך לעובד עכשיו",
+    "subTitleFirstSection": "הפוך לעובד ב",
+    "subTitleSecondSection": "ולקבל תשלום על עבודתך",
+    "companyName": "שם החברה",
+    "companyNameDescription": "לקוחות יזהו אותך בשם החברה שלך.",
+    "yearsOfExperience": "שנים של ניסיון",
+    "maxWorkDistance": "מרחק מקסים לעבודה",
+    "workCategories": "קטגוריות עבודה",
+    "offDays": "ימי חופש",
+    "startTime": "שעת התחלה",
+    "endTime": "שעת סיום",
+    "attachments": "קבצים מצורפים",
+    "attachmentsDescription": "קבצים מצורפים כגון תעודות וקורסים",
+    "submit": "שלח",
+    "reset": "איפוס",
+    "companyNameMinError": "השם של החברה חייב להיות לפחות 5 תווים",
+    "companyNameMaxError": "שם החברה חייב להיות באורך של 25 תווים לכל היותר",
+    "selectCategoriesPlaceholder": "בחר קטגוריות מתאימות",
+    "companyNamePlaceholder": "לדוגמה: חברת אור למסחר",
+    "resultsFound": "נתונים נמצאו"
   }
 }

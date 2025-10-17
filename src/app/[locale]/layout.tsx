@@ -9,6 +9,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import DesktopNavbar from "@/components/navbars/DesktopNavbar";
+import { Toaster } from "sonner";
 const tajawal = Tajawal({
   subsets: ["arabic"],
   weight: ["400", "500", "700"],
@@ -62,6 +63,7 @@ export default async function RootLayout({ children, params }: Props) {
             </ClerkProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
+        <Toaster position="bottom-left" />
       </body>
     </html>
   );

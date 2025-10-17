@@ -1,38 +1,47 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 type WorkerRequestParams = {
   offDays: string[];
-  maxWorkDistance?: number;
-  yearsExperience?: number;
-  attachments?: string[]; // URLs or file paths (PDFs)
+  maxWorkDistance: string;
+  yearsOfExperience: string;
   message?: string;
-  userId: string;
-  companyName?: string;
-  workHours: Record<string, { start: string; end: string }>;
+  // userId?: string;
+  areasOfExperience: string[];
+  companyName: string;
+  startTime: string;
+  endTime: string;
 };
 export const sendWorkerRequestToSystem = async (data: WorkerRequestParams) => {
   try {
-    const { userId } = data;
+    const { userId } = await auth();
 
     if (!userId) return;
 
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { clerkId: userId },
     });
 
     if (!user) return { success: false, message: "User not found" };
     const existingRequest = await prisma.workerRequest.findFirst({
-      where: { userId, status: "PENDING" },
+      where: { userId: user.id, status: "PENDING" },
     });
     if (existingRequest) {
       return { success: false, message: "You already have a pending request" };
     }
     const workerRequest = await prisma.workerRequest.create({
       data: {
-        ...data,
+        companyName: data.companyName,
+        yearsExperience: data.yearsOfExperience,
+        maxWorkDistance: data.maxWorkDistance,
+        offDays: data.offDays,
+        startTime: data.startTime,
+        endTime: data.endTime,
+        areasOfExperience: data.areasOfExperience,
+        userId: user.id,
       },
     });
     revalidatePath("/");
@@ -54,11 +63,11 @@ export const approveWorkerRequest = async (requestId: string) => {
       data: {
         userId: targetRequest.userId,
         offDays: targetRequest.offDays,
-        workHours: targetRequest.workHours || {},
+        startTime: targetRequest.startTime,
+        endTime: targetRequest.endTime,
         companyName: targetRequest.companyName,
         yearsExperience: targetRequest.yearsExperience,
         maxWorkDistance: targetRequest.maxWorkDistance,
-        attachments: targetRequest.attachments,
       },
     });
     if (!newWorker) throw new Error("Error creating worker profile");

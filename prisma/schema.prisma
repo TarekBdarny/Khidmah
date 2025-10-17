@@ -34,6 +34,8 @@ model User {
   workPosts     WorkPost[]     @relation("ClientPosts")
   ratingsGiven  Rating[]       @relation("UserRatings")
   savedWorkers  SavedWorkers[]
+  attachments  Attachment[]
+
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -44,17 +46,16 @@ model Worker {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   offDays   String[] // e.g., ["Monday", "Wednesday"]
-  workHours Json // e.g., {"Sunday" : {"start": "09:00", "end": "17:00"}, ...}
+ startTime String
+ endTime String
   companyName String?
-  yearsExperience Int?
+  yearsExperience String?
   availableToWork Boolean @default(true)
-  maxWorkDistance Int?
-  attachments   String[] // URLs or file paths (PDFs)
+  maxWorkDistance String?
 
   // Relations
   ratings       Rating[]
   previousWorks PreviousWork[]
-  experience    Category[]
   applicants    WorkPost[]     @relation("JobApplicants")
   savedByUsers  SavedWorkers[]
   createdAt     DateTime       @default(now())
@@ -87,7 +88,7 @@ model WorkPost {
 
   client     User       @relation("ClientPosts", fields: [clientId], references: [id])
   applicants Worker[]   @relation("JobApplicants")
-  categories Category[] @relation("WorkPostCategories")
+  // categories Category[] @relation("WorkPostCategories")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -102,20 +103,41 @@ model PreviousWork {
   finishTime  DateTime?
   photos      String[]
 
-  worker Worker @relation(fields: [workerId], references: [id])
+  worker Worker @relation(fields: [workerId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
+model Attachment {
+  id String @id @unique @default(cuid())
+  userId String
+  publicId String
+  name String
+  size Int
+  urlPath String
+  fileType String
+  extension Extensions
+  createdAt DateTime @default(now())
+  updatedAt     DateTime       @updatedAt
 
+  user User @relation(fields: [userId] , references: [id], onDelete: Cascade)
+
+}
 model Category {
   id          String  @id @default(cuid())
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  translations CategoryTranslation[]
+}
+model CategoryTranslation {
+  id          String    @id @default(uuid())
+  language    String    // 'he', 'ar', 'en', etc.
   name        String
   description String?
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  workers   Worker[]
-  workPosts WorkPost[] @relation("WorkPostCategories")
+  @@unique([language, categoryId]) // prevent duplicate translations per category
 }
-
 model WorkerRequest {
   id          String        @id @default(cuid())
   userId      String        @unique
@@ -123,12 +145,13 @@ model WorkerRequest {
   message     String?
   attachments String[]
   offDays   String[] // e.g., ["Monday", "Wednesday"]
-  workHours Json // e.g., {"Sunday" : {"start": "09:00", "end": "17:00"}, ...}
+  startTime String
+  endTime String
   companyName String?
-
-  yearsExperience Int?
+  areasOfExperience String[]
+  yearsExperience String?
   availableToWork Boolean @default(true)
-  maxWorkDistance Int?
+  maxWorkDistance String?
   createdAt   DateTime      @default(now())
   reviewedAt  DateTime?
 
@@ -175,4 +198,12 @@ enum Role {
   ADMIN
   CLIENT
   WORKER
+}
+enum Extensions {
+  png
+  jpg
+  jpeg
+  gif
+  avif
+  pdf
 }

@@ -1,9 +1,11 @@
 "use client";
 import { updateUserInfo } from "@/actions/user.action";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const page = () => {
+  const router = useRouter();
   const [data, setData] = useState({
     city: "",
     phoneNumber: "",
@@ -18,6 +20,7 @@ const page = () => {
         return;
       }
       //TODO: navigate to the home page or profile page
+      router.push("/");
     } catch (error) {}
   };
   return (
