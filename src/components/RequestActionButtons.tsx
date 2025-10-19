@@ -6,8 +6,10 @@ import {
   rejectWorkerRequest,
 } from "@/actions/workerRequest.action";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 const RequestActionButtons = ({ requestId }: { requestId: string }) => {
+  const t = useTranslations("BecomeWorkerForm");
   const handleApprove = async () => {
     const res = await approveWorkerRequest(requestId);
     if (res.success) {
@@ -27,10 +29,10 @@ const RequestActionButtons = ({ requestId }: { requestId: string }) => {
   return (
     <div className=" w-full flex gap-10 mt-8">
       <Button variant={"action"} onClick={handleApprove} className="flex-1">
-        Approve
+        {t("approveButton")}
       </Button>
       <Button variant={"destructive"} className="flex-1" onClick={handleReject}>
-        Decline
+        {t("declineButton")}
       </Button>
     </div>
   );

@@ -1,6 +1,7 @@
 import { registerUserToDB } from "@/actions/user.action";
 import AvailableCategories from "@/components/AvailableCategories";
 import BecomeAWorker from "@/components/BecomeAWorker";
+import { CallToAction } from "@/components/CallToAction";
 import FAQ02 from "@/components/faq-02/faq-02";
 import Features01Page from "@/components/features-01/features-01";
 import FooterSection from "@/components/footer";
@@ -17,7 +18,14 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
   const currUser = await currentUser();
-  const t = await getTranslations("HomePage");
+  const t = await getTranslations("CTA");
+  const items = [
+    t("feature1"),
+    t("feature2"),
+    t("feature3"),
+    t("feature4"),
+    t("feature5"),
+  ];
   if (currUser) {
     await registerUserToDB();
   }
@@ -37,10 +45,13 @@ export default async function Home() {
       <HeroSection />
       <WhyToChooseUs />
       <FAQ02 />
-      {/* <AvailableCategories /> */}
-      {/* <Features01Page /> */}
-      {/* <BecomeAWorker /> */}
-      {/* <FooterSection /> */}
+      <CallToAction
+        title={t("title")}
+        description={t("subtitle")}
+        buttonText={t("button")}
+        buttonUrl="/becomeWorker"
+        items={items}
+      />
       <Footer05Page />
     </main>
   );

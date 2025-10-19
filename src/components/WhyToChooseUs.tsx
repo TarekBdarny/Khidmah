@@ -2,7 +2,17 @@ import React from "react";
 import GridContainer from "./reuseable/GridContainer";
 import HomepageCard from "./Cards/HomepageCard";
 import { useTranslations } from "next-intl";
-import { Timer, Zap, ZoomIn } from "lucide-react";
+import {
+  BadgeCheck,
+  Clock,
+  FileSignature,
+  Headphones,
+  MapPin,
+  ShieldCheck,
+  Timer,
+  Zap,
+  ZoomIn,
+} from "lucide-react";
 
 const WhyToChooseUs = () => {
   return (
@@ -106,116 +116,96 @@ import { Settings2, Sparkles } from "lucide-react";
 import { ReactNode } from "react";
 
 export function Features() {
+  const t = useTranslations("WhyToChooseUs");
   return (
     <section className="bg-zinc-50 py-16 md:py-32 dark:bg-transparent">
       <div className="@container mx-auto max-w-5xl px-6">
         <div className="text-center">
           <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
-            Built to cover your needs
+            {t("title")}
           </h2>
-          <p className="mt-4">
-            Libero sapiente aliquam quibusdam aspernatur, praesentium iusto
-            repellendus.
-          </p>
+          <p className="mt-4">{t("subtitle")}</p>
         </div>
         <div className="@min-lg:grid-cols-2 @ming-lg:max-w-full @min-4xl:grid-cols-3 mx-auto mt-8 grid  gap-6 *:text-center md:mt-16">
           {/* className="mx-auto mt-8 grid max-w-6xl gap-6 *:text-center sm:grid-cols-2 lg:grid-cols-4 md:mt-16" */}
           <Card className="group shadow-zinc-950/5 bg-background">
             <CardHeader className="pb-3">
               <CardDecorator>
-                <Zap className="size-6" aria-hidden />
+                <FileSignature className="size-6" aria-hidden />
               </CardDecorator>
 
-              <h3 className="mt-6 font-medium">Customizable</h3>
+              <h3 className="mt-6 font-medium">{t("contract")}</h3>
             </CardHeader>
 
             <CardContent>
-              <p className="text-sm">
-                Extensive customization options, allowing you to tailor every
-                aspect to meet your specific needs.
-              </p>
+              <p className="text-sm">{t("contractDesc")}</p>
             </CardContent>
           </Card>
 
           <Card className="group shadow-zinc-950/5 bg-background">
             <CardHeader className="pb-3">
               <CardDecorator>
-                <Settings2 className="size-6" aria-hidden />
+                <ShieldCheck className="size-6" aria-hidden />
               </CardDecorator>
 
-              <h3 className="mt-6 font-medium">You have full control</h3>
+              <h3 className="mt-6 font-medium">{t("securePayment")}</h3>
             </CardHeader>
 
             <CardContent>
-              <p className="mt-3 text-sm">
-                From design elements to functionality, you have complete control
-                to create a unique and personalized experience.
-              </p>
+              <p className="mt-3 text-sm">{t("securePaymentDesc")}</p>
             </CardContent>
           </Card>
 
           <Card className="group shadow-zinc-950/5 bg-background">
             <CardHeader className="pb-3">
               <CardDecorator>
-                <Sparkles className="size-6" aria-hidden />
+                <Clock className="size-6" aria-hidden />
               </CardDecorator>
 
-              <h3 className="mt-6 font-medium">Powered By AI</h3>
+              <h3 className="mt-6 font-medium">{t("freeWork")}</h3>
             </CardHeader>
 
             <CardContent>
-              <p className="mt-3 text-sm">
-                Elements to functionality, you have complete control to create a
-                unique experience.
-              </p>
+              <p className="mt-3 text-sm">{t("freeWorkDesc")}</p>
             </CardContent>
           </Card>
           <Card className="group shadow-zinc-950/5 bg-background">
             <CardHeader className="pb-3">
               <CardDecorator>
-                <Sparkles className="size-6" aria-hidden />
+                <BadgeCheck className="size-6" aria-hidden />
               </CardDecorator>
 
-              <h3 className="mt-6 font-medium">Powered By AI</h3>
+              <h3 className="mt-6 font-medium">{t("trustWorkers")}</h3>
             </CardHeader>
 
             <CardContent>
-              <p className="mt-3 text-sm">
-                Elements to functionality, you have complete control to create a
-                unique experience.
-              </p>
+              <p className="mt-3 text-sm">{t("trustWorkersDesc")}</p>
             </CardContent>
           </Card>
           <Card className="group shadow-zinc-950/5 bg-background">
             <CardHeader className="pb-3">
               <CardDecorator>
-                <Sparkles className="size-6" aria-hidden />
+                <Headphones className="size-6" aria-hidden />
               </CardDecorator>
 
-              <h3 className="mt-6 font-medium">Powered By AI</h3>
+              <h3 className="mt-6 font-medium">{t("support")}</h3>
             </CardHeader>
 
             <CardContent>
-              <p className="mt-3 text-sm">
-                Elements to functionality, you have complete control to create a
-                unique experience.
-              </p>
+              <p className="mt-3 text-sm">{t("supportDesc")}</p>
             </CardContent>
           </Card>
           <Card className="group shadow-zinc-950/5 bg-background">
             <CardHeader className="pb-3">
               <CardDecorator>
-                <Sparkles className="size-6" aria-hidden />
+                <MapPin className="size-6" aria-hidden />
               </CardDecorator>
 
-              <h3 className="mt-6 font-medium">Powered By AI</h3>
+              <h3 className="mt-6 font-medium">{t("closeServices")}</h3>
             </CardHeader>
 
             <CardContent>
-              <p className="mt-3 text-sm">
-                Elements to functionality, you have complete control to create a
-                unique experience.
-              </p>
+              <p className="mt-3 text-sm">{t("closeServicesDesc")}</p>
             </CardContent>
           </Card>
         </div>

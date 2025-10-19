@@ -15,6 +15,7 @@ import {
 import { ArrowDownUp, ArrowUpDown, Search } from "lucide-react";
 import StatusSelect from "./StatusSelect";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 const ToolBar = ({
   length,
@@ -24,6 +25,7 @@ const ToolBar = ({
   setStatus,
   setSearchedCompany,
 }: ToolBarProps & StatusSelectProps) => {
+  const t = useTranslations("BecomeWorkerForm");
   return (
     <div
       className="w-full  flex flex-col md:flex-row items-center border-1  gap-4 p-4 
@@ -33,7 +35,7 @@ const ToolBar = ({
       <InputGroup className="w-full md:w-3/4 pr-2">
         <InputGroupInput
           onChange={({ target }) => setSearchedCompany(target.value)}
-          placeholder="Search..."
+          placeholder={t("searchByCompanyName")}
         />
         <InputGroupAddon align="inline-end">
           <Button variant={"ghost"}>
@@ -55,10 +57,12 @@ const ToolBar = ({
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            {order === "desc" ? "Descending Order" : "Ascending Order"}
+            {order === "desc" ? t("descendingOrder") : t("ascendingOrder")}
           </TooltipContent>
         </Tooltip>
-        <Badge className="text-white p-2 text-">{length} found</Badge>
+        <Badge className="text-white p-2 text-">
+          {t("requestsFound")} {length}
+        </Badge>
       </div>
     </div>
   );

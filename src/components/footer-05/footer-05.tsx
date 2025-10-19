@@ -36,8 +36,7 @@ const footerLinks = [
 
 const Footer05Page = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="grow bg-muted" />
+    <div className=" flex flex-col">
       <footer className="border-t">
         <div className="max-w-(--breakpoint-xl) mx-auto">
           <div className="py-12 flex flex-col justify-start items-center">
@@ -79,9 +78,9 @@ const Footer05Page = () => {
             <span className="text-muted-foreground">
               &copy; {new Date().getFullYear()}{" "}
               <Link href="/" target="_blank">
-                Shadcn UI Blocks
-              </Link>
-              . All rights reserved.
+                Khidma
+              </Link>{" "}
+              All rights reserved
             </span>
 
             <div className="flex items-center gap-5 text-muted-foreground">

@@ -8,8 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTranslations } from "next-intl";
 
 const StatusSelect = ({ status, setStatus }: StatusSelectProps) => {
+  const t = useTranslations("BecomeWorkerForm");
   const handleValueChange = (
     value: "ALL" | "PENDING" | "APPROVED" | "REJECTED"
   ) => {
@@ -18,34 +20,34 @@ const StatusSelect = ({ status, setStatus }: StatusSelectProps) => {
   return (
     <Select dir="rtl" onValueChange={handleValueChange}>
       <SelectTrigger className="w-full md:w-64">
-        <SelectValue placeholder="Select a Status" />
+        <SelectValue placeholder={t("selectAStatus")} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Statuses</SelectLabel>
+          <SelectLabel>{t("statuses")}</SelectLabel>
           <SelectItem
             value="ALL"
             className={`${status === "ALL" && "bg-primary"}`}
           >
-            All
+            {t("ALL")}
           </SelectItem>
           <SelectItem
             value="PENDING"
             className={`${status === "PENDING" && "bg-primary"}`}
           >
-            Pending
+            {t("PENDING")}
           </SelectItem>
           <SelectItem
             value="APPROVED"
             className={`${status === "APPROVED" && "bg-primary"}`}
           >
-            Approved
+            {t("APPROVED")}
           </SelectItem>
           <SelectItem
             value="REJECTED"
             className={`${status === "REJECTED" && "bg-primary"}`}
           >
-            Rejected
+            {t("REJECTED")}
           </SelectItem>
         </SelectGroup>
       </SelectContent>
