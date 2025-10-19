@@ -26,10 +26,11 @@ export const sendWorkerRequestToSystem = async (data: WorkerRequestParams) => {
     });
 
     if (!user) return { success: false, message: "User not found" };
+    console.log(user.email);
     const existingRequest = await prisma.workerRequest.findFirst({
       where: { userId: user.id, status: "PENDING" },
     });
-    if (existingRequest) {
+    if (existingRequest !== null) {
       return { success: false, message: "You already have a pending request" };
     }
     const workerRequest = await prisma.workerRequest.create({
@@ -48,7 +49,6 @@ export const sendWorkerRequestToSystem = async (data: WorkerRequestParams) => {
     return { success: true, workerRequest };
   } catch (error) {
     console.log("Error sending worker request", error);
-    return { success: false, message: "Error sending worker request" };
   }
 };
 export const approveWorkerRequest = async (requestId: string) => {
@@ -72,6 +72,7 @@ export const approveWorkerRequest = async (requestId: string) => {
     });
     if (!newWorker) throw new Error("Error creating worker profile");
     //TODO: send notification to user about approval
+    revalidatePath("/");
     return { success: true, newWorker };
   } catch (error) {
     console.log("Error approving worker request", error);
@@ -101,12 +102,13 @@ export const getUserRequests = async (userId: string) => {
     console.log("Error getting user requests", error);
   }
 };
-export const getAllWorkerRequests = async () => {
+export const getAllWorkerRequests = async (order: "asc" | "desc" = "desc") => {
   try {
     const allWorkersRequests = await prisma.workerRequest.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: order },
       include: {
         user: true,
+        attachments: true,
       },
     });
     return allWorkersRequests;

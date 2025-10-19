@@ -17,6 +17,7 @@ cloudinary.config({
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
+    console.log(formData);
     const files = formData.getAll("files") as File[];
     const userId = await getLoggedUserId();
     if (!userId)
@@ -28,6 +29,13 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    const workerRequest = await prisma.workerRequest.findFirst({
+      where: {
+        userId,
+      },
+    });
+    if (!workerRequest)
+      return NextResponse.json({ error: "Request not found" }, { status: 404 });
     // Upload files to Cloudinary and save to database
     const uploadPromises = files.map(async (file) => {
       // Convert file to buffer
@@ -60,8 +68,8 @@ export async function POST(request: NextRequest) {
           publicId: result.public_id,
           fileType: isImage ? "image" : "pdf",
           name: file.name,
+          requestId: workerRequest.id,
           size: file.size,
-          extension: "png",
         },
       });
 

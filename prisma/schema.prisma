@@ -111,16 +111,16 @@ model Attachment {
   id String @id @unique @default(cuid())
   userId String
   publicId String
+  requestId String
   name String
   size Int
   urlPath String
   fileType String
-  extension Extensions
   createdAt DateTime @default(now())
   updatedAt     DateTime       @updatedAt
 
   user User @relation(fields: [userId] , references: [id], onDelete: Cascade)
-
+  request WorkerRequest @relation(fields: [requestId] , references: [id], onDelete: Cascade)
 }
 model Category {
   id          String  @id @default(cuid())
@@ -143,7 +143,7 @@ model WorkerRequest {
   userId      String        @unique
   status      RequestStatus @default(PENDING)
   message     String?
-  attachments String[]
+  attachments Attachment[]
   offDays   String[] // e.g., ["Monday", "Wednesday"]
   startTime String
   endTime String
@@ -198,12 +198,4 @@ enum Role {
   ADMIN
   CLIENT
   WORKER
-}
-enum Extensions {
-  png
-  jpg
-  jpeg
-  gif
-  avif
-  pdf
 }

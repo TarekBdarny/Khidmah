@@ -123,6 +123,7 @@
     "companyNameMaxError": "שם החברה חייב להיות באורך של 25 תווים לכל היותר",
     "selectCategoriesPlaceholder": "בחר קטגוריות מתאימות",
     "companyNamePlaceholder": "לדוגמה: חברת אור למסחר",
-    "resultsFound": "נתונים נמצאו"
+    "resultsFound": "נתונים נמצאו",
+    "workHours": "שעות עבודה"
   }
 }

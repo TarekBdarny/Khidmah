@@ -125,6 +125,7 @@
     "companyNameMaxError": "يجب أن يكون اسم الشركة 25 حرفًا على الأكثر",
     "selectCategoriesPlaceholder": "حدد التصنيفات المناسبة",
     "companyNamePlaceholder": "مثال: شركة النور للتجارة",
-    "resultsFound": "نتايج البحث"
+    "resultsFound": "نتايج البحث",
+    "workHours": "ساعات العمل"
   }
 }

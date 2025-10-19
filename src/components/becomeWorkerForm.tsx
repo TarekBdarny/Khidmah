@@ -102,7 +102,7 @@ const BecomeWorkerForm = () => {
     form.setValue("attachments", files);
   }, [files]);
 
-  const handleUpload = async () => {
+  const handleUpload = async (requestId: string) => {
     try {
       const formData = new FormData();
       files.forEach((file) => {
@@ -159,19 +159,23 @@ const BecomeWorkerForm = () => {
   //   setFiles(newFiles);
   //   form.setValue("attachments", newFiles, { shouldValidate: true });
   // };
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data);
     if (selectedExperience.length === 0) {
       toast.warning("Please select at least one skill");
       return;
     }
-    if (files.length !== 0) {
-      console.log("in uploading");
-      handleUpload();
-      console.log("after uploading");
-    }
 
-    sendWorkerRequestToSystem(data);
+    const res = await sendWorkerRequestToSystem(data);
+    if (!res?.success) {
+      toast.error(res?.message);
+      return;
+    }
+    const requestId = res?.workerRequest?.id;
+    if (!requestId) return;
+    if (files.length !== 0) {
+      handleUpload(requestId);
+    }
   };
   return (
     <Card className="w-full sm:max-w-md">

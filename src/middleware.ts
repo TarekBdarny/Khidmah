@@ -1,10 +1,18 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import {
+  clerkClient,
+  clerkMiddleware,
+  createRouteMatcher,
+} from "@clerk/nextjs/server";
 import { routing as AppConfig } from "@/i18n/routing";
 import createMiddleware from "next-intl/middleware";
+import { NextResponse } from "next/server";
+import { prisma } from "./lib/prisma";
 
 const intlMiddleware = createMiddleware(AppConfig);
 
 const isPublicRoute = createRouteMatcher([
+  "/he/sign-in(.*)",
+  "/he/sign-up(.*)",
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/ar",
@@ -13,6 +21,7 @@ const isPublicRoute = createRouteMatcher([
   "/api(.*)",
   "/becomeWorker",
 ]);
+const isAdminRoute = createRouteMatcher(["/admin(.*)", "/admin/requests(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (req.nextUrl.pathname.startsWith("/api")) {
