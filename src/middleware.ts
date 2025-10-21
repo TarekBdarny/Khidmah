@@ -1,12 +1,8 @@
-import {
-  clerkClient,
-  clerkMiddleware,
-  createRouteMatcher,
-} from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { routing as AppConfig } from "@/i18n/routing";
 import createMiddleware from "next-intl/middleware";
 import { NextResponse } from "next/server";
-import { prisma } from "./lib/prisma";
+import { getLocale } from "next-intl/server";
 
 const intlMiddleware = createMiddleware(AppConfig);
 
@@ -18,10 +14,16 @@ const isPublicRoute = createRouteMatcher([
   "/ar",
   "/he",
   "/",
+  "/onboarding(.*)",
+  "/he/onboarding",
+  "/ar/onboarding",
   "/api(.*)",
-  "/becomeWorker",
 ]);
-const isAdminRoute = createRouteMatcher(["/admin(.*)", "/admin/requests(.*)"]);
+const isAdminRoute = createRouteMatcher([
+  "/admin(.*)",
+  "/he/admin(.*)",
+  "/ar/admin(.*)",
+]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (req.nextUrl.pathname.startsWith("/api")) {
@@ -29,6 +31,21 @@ export default clerkMiddleware(async (auth, req) => {
       await auth.protect();
     }
     return; // Don't apply intl middleware to API routes
+  }
+  if (
+    !isPublicRoute(req) &&
+    (await auth()).sessionClaims?.metadata?.verified === false
+  ) {
+    const locale = await getLocale();
+    const url = new URL(`/${locale}/onboarding`, req.url);
+    return NextResponse.redirect(url);
+  }
+  if (
+    isAdminRoute(req) &&
+    (await auth()).sessionClaims?.metadata?.role !== "ADMIN"
+  ) {
+    const url = new URL("/", req.url);
+    return NextResponse.redirect(url);
   }
   if (!isPublicRoute(req)) {
     await auth.protect();

@@ -50,3 +50,13 @@ type StatusSelectProps = {
     React.SetStateAction<"PENDING" | "APPROVED" | "REJECTED" | "ALL">
   >;
 };
+export type Roles = "ADMIN" | "WORKER" | "CLIENT";
+
+declare global {
+  interface CustomJwtSessionClaims {
+    metadata: {
+      role?: Roles;
+      verified?: boolean;
+    };
+  }
+}

@@ -23,6 +23,7 @@ model User {
   email       String @unique
   password    String?
   age         Int?
+  verified Boolean @default(false)
   hasCompletedProfile Boolean @default(false)
   role        Role   @default(CLIENT)
   city        String?
@@ -180,7 +181,16 @@ model SavedWorkers {
 
   @@unique([userId, workerId])
 }
+model VerificationCode {
+  id        String   @id @default(cuid())
+  phoneNumber     String
+  code      String
+  expiresAt DateTime
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
 
+  @@index([phoneNumber, code])
+}
 enum NotificationType {
   SYSTEM
   CHAT

@@ -29,17 +29,17 @@ export default async function Home() {
   if (currUser) {
     await registerUserToDB();
   }
-  const { userId } = await auth();
+  // const { userId } = await auth();
 
-  if (userId) {
-    const user = await prisma.user.findUnique({
-      where: { clerkId: userId },
-    });
-    if (!user) return;
-    if (!user?.city) {
-      redirect("/onboarding");
-    }
-  }
+  // if (userId) {
+  //   const user = await prisma.user.findUnique({
+  //     where: { clerkId: userId },
+  //   });
+  //   if (!user) return;
+  //   if (!user?.verified) {
+  //     redirect("/onboarding");
+  //   }
+  // }
   return (
     <main className="min-h-screen">
       <HeroSection />

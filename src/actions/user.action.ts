@@ -2,6 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { setNotVerified, setRole, setVerified } from "./metadata.action";
 
 type UpdateUserInfoParams = {
   age: number;
@@ -30,6 +31,8 @@ export const registerUserToDB = async () => {
         email: user.emailAddresses[0].emailAddress,
       },
     });
+    await setRole("CLIENT", userId);
+    await setNotVerified(userId);
     return dbUser;
   } catch (error) {
     console.log("Error registering user to DB", error);
@@ -111,7 +114,6 @@ export const updateUserInfo = async ({
         city,
       },
     });
-    revalidatePath("/");
     return { success: true, updatedUser };
   } catch (error) {
     console.log("error in updateUser", error);
