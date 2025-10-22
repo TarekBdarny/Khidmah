@@ -12,6 +12,7 @@ import { useTranslations } from "next-intl";
 
 const StatusSelect = ({ status, setStatus }: StatusSelectProps) => {
   const t = useTranslations("BecomeWorkerForm");
+
   const handleValueChange = (
     value: "ALL" | "PENDING" | "APPROVED" | "REJECTED"
   ) => {

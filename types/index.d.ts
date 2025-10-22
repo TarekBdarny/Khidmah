@@ -50,8 +50,63 @@ type StatusSelectProps = {
     React.SetStateAction<"PENDING" | "APPROVED" | "REJECTED" | "ALL">
   >;
 };
-export type Roles = "ADMIN" | "WORKER" | "CLIENT";
 
+type Roles = "ADMIN" | "WORKER" | "CLIENT";
+// type DropDownMenuProps = {
+//   label: string;
+//   menuContent: Cities | DropDownCategory[] | undefined;
+//   notFoundText: string;
+//   inputPlaceHolder: string;
+// };
+type DropDownCategory = {
+  name: string;
+  id: string;
+  description: string | null;
+  language: string;
+  categoryId: string;
+};
+type DropDownItem = {
+  name: string;
+  id: string;
+  description: string | null;
+  language: string;
+  categoryId: string;
+};
+
+type CategoriesDropDownProps = {
+  label: string;
+  categoriesArray: DropDownCategory[] | undefined;
+  notFoundText: string;
+  inputPlaceHolder: string;
+  categoriesValues: string;
+  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  setCategoriesValues: React.Dispatch<React.SetStateAction<string>>;
+};
+type CitiesDropDownProps = {
+  label: string;
+  cities: string[];
+  notFoundText: string;
+  inputPlaceHolder: string;
+  handleSelectCity: (city: string) => void;
+  citiesValue: string;
+  setCitiesValue: React.Dispatch<React.SetStateAction<string>>;
+  // handleRest: () => void;
+};
+type Cities = string[];
+type FilterBarProps = {
+  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedCity: React.Dispatch<React.SetStateAction<string>>;
+  setSelectStatus: React.Dispatch<React.SetStateAction<string>>;
+  handleReset: () => void;
+  reset: boolean;
+  citiesValue: string;
+  selectStatus: string;
+  results: number | undefined;
+  setCitiesValue: React.Dispatch<React.SetStateAction<string>>;
+  categoriesValues: string;
+  setCategoriesValues: React.Dispatch<React.SetStateAction<string>>;
+  setReset: React.Dispatch<React.SetStateAction<boolean>>;
+};
 declare global {
   interface CustomJwtSessionClaims {
     metadata: {

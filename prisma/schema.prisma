@@ -36,7 +36,10 @@ model User {
   ratingsGiven  Rating[]       @relation("UserRatings")
   savedWorkers  SavedWorkers[]
   attachments  Attachment[]
-
+  sentMessages     Message[]      @relation("SentMessages")
+  receivedMessages Message[]      @relation("ReceivedMessages")
+  conversationsA   Conversation[] @relation("UserA")
+  conversationsB   Conversation[] @relation("UserB")
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -53,7 +56,7 @@ model Worker {
   yearsExperience String?
   availableToWork Boolean @default(true)
   maxWorkDistance String?
-
+  areasOfExperience String[]
   // Relations
   ratings       Rating[]
   previousWorks PreviousWork[]
@@ -191,6 +194,50 @@ model VerificationCode {
 
   @@index([phoneNumber, code])
 }
+
+model Conversation {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Two users in a 1-on-1 conversation
+  userAId String
+  userA   User   @relation("UserA", fields: [userAId], references: [id], onDelete: Cascade)
+  
+  userBId String
+  userB   User   @relation("UserB", fields: [userBId], references: [id], onDelete: Cascade)
+
+  // Messages in this conversation
+  messages Message[]
+
+  // Ensure a unique conversation between two users
+  @@unique([userAId, userBId])
+  @@index([userAId])
+  @@index([userBId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  isRead    Boolean  @default(false)
+
+  // Sender and receiver
+  senderId   String
+  sender     User   @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  
+  receiverId String
+  receiver   User   @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  // Which conversation this belongs to
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([receiverId])
+}
+
 enum NotificationType {
   SYSTEM
   CHAT
