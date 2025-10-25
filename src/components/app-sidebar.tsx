@@ -99,7 +99,7 @@ export function AppSidebar() {
     {
       id: "chats",
       title: t("chats"),
-      href: "#",
+      href: "/chat",
       icon: MessageSquare,
     },
   ];

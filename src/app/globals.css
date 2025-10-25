@@ -42,6 +42,9 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
+[data-sidebar="true"] {
+  overflow: visible !important;
+}
 
 :root {
   --radius: 0.65rem;
@@ -111,6 +114,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.527 0.154 150.069);
 }
+
 .listItem::after {
   content: "";
   position: absolute;

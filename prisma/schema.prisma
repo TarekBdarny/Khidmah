@@ -199,6 +199,8 @@ model Conversation {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  lastMessage String?
+  lastMessageAt DateTime @default(now())
 
   // Two users in a 1-on-1 conversation
   userAId String
@@ -221,7 +223,6 @@ model Message {
   content   String
   createdAt DateTime @default(now())
   isRead    Boolean  @default(false)
-
   // Sender and receiver
   senderId   String
   sender     User   @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)

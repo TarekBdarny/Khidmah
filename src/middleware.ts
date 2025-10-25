@@ -32,21 +32,21 @@ export default clerkMiddleware(async (auth, req) => {
     }
     return; // Don't apply intl middleware to API routes
   }
-  if (
-    !isPublicRoute(req) &&
-    (await auth()).sessionClaims?.metadata?.verified === false
-  ) {
-    const locale = await getLocale();
-    const url = new URL(`/${locale}/onboarding`, req.url);
-    return NextResponse.redirect(url);
-  }
-  if (
-    isAdminRoute(req) &&
-    (await auth()).sessionClaims?.metadata?.role !== "ADMIN"
-  ) {
-    const url = new URL("/", req.url);
-    return NextResponse.redirect(url);
-  }
+  // if (
+  //   !isPublicRoute(req) &&
+  //   (await auth()).sessionClaims?.metadata?.verified === false
+  // ) {
+  //   const locale = await getLocale();
+  //   const url = new URL(`/${locale}/onboarding`, req.url);
+  //   return NextResponse.redirect(url);
+  // }
+  // if (
+  //   isAdminRoute(req) &&
+  //   (await auth()).sessionClaims?.metadata?.role !== "ADMIN"
+  // ) {
+  //   const url = new URL("/", req.url);
+  //   return NextResponse.redirect(url);
+  // }
   if (!isPublicRoute(req)) {
     await auth.protect();
   }

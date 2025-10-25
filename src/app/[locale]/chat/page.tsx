@@ -1,16 +1,8 @@
 import React from "react";
-import Chat from "./components/Chat";
+import { EmptyChats } from "./components/empty-components";
 
-const page = () => {
-  return (
-    <main>
-      <Chat
-        currentUserId="cmh2e243s0001ugc4utcwtzuw"
-        otherUserId="cmh2e23vj0000ugc4nvssew92"
-      />
-      {/*  */}
-    </main>
-  );
+const page = async () => {
+  return <EmptyChats />;
 };
 
 export default page;

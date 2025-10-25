@@ -3,6 +3,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { pusherServer } from "@/lib/pusher";
+import { timeAgo } from "@/lib/utils";
 
 export async function POST(request: Request) {
   try {
@@ -57,11 +58,25 @@ export async function POST(request: Request) {
         },
       },
     });
-
     // Update conversation timestamp
-    await prisma.conversation.update({
-      where: { id: conversation.id },
-      data: { updatedAt: new Date() },
+    const updatedConversation = await prisma.conversation.update({
+      where: {
+        id: conversation.id,
+      },
+      data: {
+        lastMessageAt: new Date(),
+        lastMessage: message.content,
+        messages: {
+          connect: {
+            id: message.id,
+          },
+        },
+      },
+      include: {
+        userA: true,
+        userB: true,
+        messages: true,
+      },
     });
 
     // Trigger Pusher event for both users
@@ -76,6 +91,19 @@ export async function POST(request: Request) {
       conversationId: conversation.id,
       message,
     });
+    const lastMessage =
+      updatedConversation.messages[updatedConversation.messages.length - 1];
+
+    pusherServer.trigger(
+      `user-${senderId}`,
+      "conversation:update",
+      updatedConversation
+    );
+    pusherServer.trigger(
+      `user-${receiverId}`,
+      "conversation:update",
+      updatedConversation
+    );
 
     return NextResponse.json(message);
   } catch (error) {

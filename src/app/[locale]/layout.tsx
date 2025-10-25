@@ -43,7 +43,11 @@ export default async function RootLayout({ children, params }: Props) {
       dir={locale !== "ar" && locale !== "he" ? "ltr" : "rtl"}
       suppressHydrationWarning
     >
-      <body className={`${tajawal.variable} ${heebo.variable} antialiased`}>
+      <body
+        className={`${tajawal.variable} ${heebo.variable} antialiased
+    
+      `}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -54,7 +58,7 @@ export default async function RootLayout({ children, params }: Props) {
             <ClerkProvider>
               <SidebarProvider defaultOpen={false}>
                 <AppSidebar />
-                <main className="w-full min-h-screen">
+                <main className="w-full max-h-screen">
                   <DesktopNavbar />
 
                   {children}

@@ -107,6 +107,70 @@ type FilterBarProps = {
   setCategoriesValues: React.Dispatch<React.SetStateAction<string>>;
   setReset: React.Dispatch<React.SetStateAction<boolean>>;
 };
+interface Message {
+  id: string;
+  createdAt: Date;
+  isRead: boolean;
+  content: string;
+  senderId: string;
+  receiverId: string;
+  conversationId: string;
+  sender: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profilePic: string | null;
+  };
+}
+[];
+interface Conversation {
+  userB: {
+    id: string;
+    firstName: string;
+    clerkId: string;
+    lastName: string;
+    phoneNumber: string | null;
+    profilePic: string | null;
+    email: string;
+    password: string | null;
+    age: number | null;
+    verified: boolean;
+    hasCompletedProfile: boolean;
+    role: "CLIENT" | "ADMIN" | "WORKER";
+    city: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  userA: {
+    id: string;
+    firstName: string;
+    clerkId: string;
+    lastName: string;
+    phoneNumber: string | null;
+    profilePic: string | null;
+    email: string;
+    password: string | null;
+    age: number | null;
+    verified: boolean;
+    hasCompletedProfile: boolean;
+    role: "CLIENT" | "ADMIN" | "WORKER";
+    city: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  messages: messages[];
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userAId: string;
+  userBId: string;
+  lastMessage?: string | undefined | null;
+  lastMessageAt: Date;
+}
+interface MessagesConversation {
+  id: string;
+  messages: Message[];
+}
 declare global {
   interface CustomJwtSessionClaims {
     metadata: {
