@@ -93,8 +93,8 @@ const UsersSidebar = ({ loggedUserId }: SidebarUsersProps) => {
                         </h2>
                         {/* <p className="text-sm text-muted-foreground">2h ago</p> */}
                       </div>
-                      <div className="flex flex-row items-center justify-between w-full">
-                        <p className="text-sm text-muted-foreground">
+                      <div className="flex flex-row items-center justify-between w-full ">
+                        <p className="text-sm text-muted-foreground truncate w-[170px] ">
                           {conversation.lastMessage
                             ? conversation.lastMessage
                             : "No messages yet"}

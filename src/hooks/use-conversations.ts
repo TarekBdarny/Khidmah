@@ -41,14 +41,23 @@ export function useConversations(
     });
 
     // Listen for conversation updates
-    channel.bind("conversation:update", (updatedConversation: Conversation) => {
-      console.log("Conversation updated:", updatedConversation);
-      setConversations((prev) =>
-        prev.map((c) =>
-          c.id === updatedConversation.id ? { ...c, ...updatedConversation } : c
-        )
-      );
-    });
+    channel.bind(
+      "conversation:update",
+      (updatedConversation: {
+        id: string;
+        lastMessage: string;
+        lastMessageAt: Date;
+      }) => {
+        console.log("Conversation updated:", updatedConversation);
+        setConversations((prev) =>
+          prev.map((c) =>
+            c.id === updatedConversation.id
+              ? { ...c, ...updatedConversation }
+              : c
+          )
+        );
+      }
+    );
 
     // Listen for conversation deletions
     channel.bind(

@@ -94,16 +94,16 @@ export async function POST(request: Request) {
     const lastMessage =
       updatedConversation.messages[updatedConversation.messages.length - 1];
 
-    pusherServer.trigger(
-      `user-${senderId}`,
-      "conversation:update",
-      updatedConversation
-    );
-    pusherServer.trigger(
-      `user-${receiverId}`,
-      "conversation:update",
-      updatedConversation
-    );
+    pusherServer.trigger(`user-${senderId}`, "conversation:update", {
+      id: conversation.id,
+      lastMessage: lastMessage.content,
+      lastMessageAt: updatedConversation.lastMessageAt,
+    });
+    pusherServer.trigger(`user-${receiverId}`, "conversation:update", {
+      id: conversation.id,
+      lastMessage: lastMessage.content,
+      lastMessageAt: updatedConversation.lastMessageAt,
+    });
 
     return NextResponse.json(message);
   } catch (error) {
