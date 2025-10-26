@@ -27,6 +27,8 @@ model User {
   hasCompletedProfile Boolean @default(false)
   role        Role   @default(CLIENT)
   city        String?
+  isOnline Boolean @default(false)
+  lastSeen DateTime @default(now())
 
   // Relations
   worker        Worker?

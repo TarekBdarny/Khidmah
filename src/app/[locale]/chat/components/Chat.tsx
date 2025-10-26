@@ -35,7 +35,7 @@ export default function Chat({
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
   const router = useRouter();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const hasMarkedAsRead = useRef(false);
+  const markingAsRead = useRef(false);
   const otherUser =
     conversation?.userA.id === loggedUserId
       ? conversation?.userB
@@ -97,6 +97,39 @@ export default function Chat({
     };
     fetchConversation();
   }, [conversationId]);
+  const markMessagesAsRead = async () => {
+    if (markingAsRead.current) return;
+
+    try {
+      markingAsRead.current = true;
+
+      console.log(
+        "📖 Marking messages as read for conversation:",
+        conversationId
+      );
+
+      const response = await fetch("/api/messages/read", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          conversationId,
+          userId: loggedUserId,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("✅ Marked as read:", data);
+      }
+    } catch (error) {
+      console.error("Error marking messages as read:", error);
+    } finally {
+      // Reset after a delay to allow next mark
+      setTimeout(() => {
+        markingAsRead.current = false;
+      }, 1000);
+    }
+  };
   // Load conversation and messages
   useEffect(() => {
     const loadConversation = async () => {
@@ -110,6 +143,7 @@ export default function Chat({
         if (data) {
           setMessages(data.messages || []);
         }
+        setTimeout(() => markMessagesAsRead(), 500);
       } catch (error) {
       } finally {
         setIsLoading(false);
@@ -141,7 +175,52 @@ export default function Chat({
       channel.unsubscribe();
     };
   }, [conversationId]);
+  useEffect(() => {
+    const channel = pusherClient.subscribe(`user-${loggedUserId}`);
 
+    channel.bind(
+      "messages:read",
+      (data: {
+        conversationId: string;
+        readBy: string;
+        messages: { id: string; isRead: boolean; readAt: string }[];
+      }) => {
+        console.log("📖 Messages were read:", data);
+
+        if (data.conversationId === conversationId) {
+          setMessages((prev) =>
+            prev.map((msg) => {
+              const readMessage = data.messages.find((m) => m.id === msg.id);
+              if (readMessage) {
+                return {
+                  ...msg,
+                  isRead: true,
+                  readAt: readMessage.readAt,
+                };
+              }
+              return msg;
+            })
+          );
+        }
+      }
+    );
+
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+    };
+  }, [loggedUserId, conversationId]);
+  useEffect(() => {
+    const handleFocus = () => {
+      markMessagesAsRead();
+    };
+
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [conversationId, loggedUserId]);
   // Scroll when messages change
   useEffect(() => {
     scrollToBottom();
@@ -292,6 +371,15 @@ export default function Chat({
                       minute: "2-digit",
                     })}
                   </p>
+                  {isCurrentUser && (
+                    <span className="text-xs">
+                      {message.isRead ? (
+                        <span className="text-blue-100">✓✓</span>
+                      ) : (
+                        <span className="text-blue-200">✓</span>
+                      )}
+                    </span>
+                  )}
                 </div>
                 <div ref={messagesEndRef} />
               </div>
