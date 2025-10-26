@@ -23,7 +23,6 @@ export async function POST(request: NextRequest) {
         { status: 404 }
       );
     }
-    console.log(phone);
     const usersWithSamePhone = await prisma.user.findMany({
       where: {
         phoneNumber: phone,

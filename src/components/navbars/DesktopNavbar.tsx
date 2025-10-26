@@ -4,7 +4,6 @@ import { SidebarTrigger } from "../ui/sidebar";
 import { useTranslations } from "next-intl";
 import LocaleSwitcher from "../LocaleSwitcher";
 import { Briefcase, Bell, MessageSquare, Search } from "lucide-react";
-import { ProfileDropdownMenu } from "../reuseable/dropdown/ProfileDropdown";
 import AuthButtons from "../reuseable/buttons/AuthButtons";
 import { Button } from "../ui/button";
 import ThemeSwitcher from "../ThemeSwitcher";

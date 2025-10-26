@@ -1,4 +1,7 @@
+import { addUserToChatWith } from "@/actions/chat.action";
+import { getLoggedUserId } from "@/actions/user.action";
 import { getWorkersExplicit } from "@/actions/worker.action";
+import ProfilePictureWithStatus from "@/components/reuseable/avatar/ProfilePicture";
 import ProfilePicture from "@/components/reuseable/avatar/ProfilePicture";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,6 +12,8 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Spinner } from "@/components/ui/spinner";
+import { getInitials } from "@/lib/utils";
 import {
   ArrowUpRight,
   Calendar,
@@ -19,7 +24,9 @@ import {
   Star,
 } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { toast } from "sonner";
 type Workers = Awaited<ReturnType<typeof getWorkersExplicit>>;
 export type Worker = Workers["data"][0];
 
@@ -35,23 +42,51 @@ const WorkerCard = ({
   endTime,
   offDays,
 }: Worker) => {
-  const userInitials = `${user.firstName[0]
-    .slice(0, 1)
-    .toUpperCase()}${user.lastName[0].slice(0, 1).toUpperCase()}`;
+  const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
+  const userInitials = getInitials(user.firstName, user.lastName);
   const userFullName = `${user.firstName} ${user.lastName}`;
   const workTime = `${startTime} - ${endTime}`;
   const ratings = user.ratingsGiven;
-
+  const [loggedUserId, setLoggedUserId] = React.useState<
+    null | string | undefined
+  >(null);
+  useEffect(() => {
+    const getUserId = async () => {
+      const id = await getLoggedUserId();
+      setLoggedUserId(id);
+    };
+    getUserId();
+  }, []);
+  const handleContact = async () => {
+    try {
+      setLoading(true);
+      const res = await addUserToChatWith(user.id);
+      if (!res?.success) {
+        toast.error(res?.message);
+        return;
+      }
+      toast.success(res?.message);
+      router.push(`/chat/${res.data?.id}`);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Card className="flex flex-col gap-4">
       {/* profile picture + names */}
       <CardHeader>
         <div className=" flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <ProfilePicture
+            <ProfilePictureWithStatus
               useCase="large"
               profilePic={user.profilePic || ""}
               fallback={userInitials ?? "US"}
+              userId={user.id}
+              isOnline={user.isOnline}
+              currentUserId={loggedUserId}
             />
             <div className="flex items-center gap-2 w-fit">
               <div className="flex flex-col gap-1">
@@ -135,9 +170,21 @@ const WorkerCard = ({
       </CardContent>
       <Separator />
       <CardFooter className="my-2">
-        <Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-1 active:scale-[0.98]">
-          <ArrowUpRight />
-          Contact
+        <Button
+          className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-1 active:scale-[0.98]"
+          onClick={handleContact}
+        >
+          {loading ? (
+            <>
+              <Spinner />
+              creating conversation...
+            </>
+          ) : (
+            <>
+              <ArrowUpRight />
+              Contact
+            </>
+          )}
         </Button>
       </CardFooter>
     </Card>

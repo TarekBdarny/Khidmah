@@ -3,13 +3,12 @@ import {
   addUserToChatWith,
   getUsersIncludesFullname,
 } from "@/actions/chat.action";
-import ProfilePicture from "@/components/reuseable/avatar/ProfilePicture";
+import { ProfilePicture } from "@/components/reuseable/avatar/ProfilePicture";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -19,15 +18,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-import { Router, UserRoundPlus } from "lucide-react";
+import { UserRoundPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { EmptyUsersDialog } from "./empty-components";
 import { LoadingDialogSkeleton } from "./Loaders";
-import { array } from "zod";
-import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useConversations } from "@/hooks/use-conversations";
+import SearchInput from "./SearchInput";
 type Users = Awaited<ReturnType<typeof getUsersIncludesFullname>>;
 export function DialogInput() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -85,12 +82,12 @@ export function DialogInput() {
           </DialogHeader>
           <div className="grid gap-4">
             <div className="grid gap-3">
-              <Label htmlFor="name-1">Full Name</Label>
-              <Input
-                id="name-1"
-                name="name"
-                autoComplete="off"
-                onChange={(e) => setSearchTerm(e.target.value)}
+              <SearchInput
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                label="Search"
+                id="search"
+                placeholder="Search with full name"
               />
             </div>
           </div>

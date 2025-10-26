@@ -1,9 +1,6 @@
 "use server";
-import { NextResponse } from "next/server";
 import { getLoggedUserId } from "./user.action";
 import { prisma } from "@/lib/prisma";
-import { success } from "zod";
-import { revalidatePath } from "next/cache";
 import { pusherServer } from "@/lib/pusher";
 
 export const getLastSpokenWithUsers = async () => {
@@ -68,6 +65,11 @@ export const getUsersIncludesFullname = async (fullname: string) => {
                 userAId: LoggedUserId,
               },
             },
+          },
+        ],
+        AND: [
+          {
+            verified: true,
           },
         ],
       },

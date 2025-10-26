@@ -140,6 +140,8 @@ interface Conversation {
     city: string | null;
     createdAt: Date;
     updatedAt: Date;
+    isOnline?: boolean;
+    lastSeen?: Date;
   };
   userA: {
     id: string;
@@ -157,6 +159,8 @@ interface Conversation {
     city: string | null;
     createdAt: Date;
     updatedAt: Date;
+    isOnline?: boolean;
+    lastSeen?: Date;
   };
   messages: messages[];
   id: string;

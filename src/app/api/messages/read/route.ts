@@ -62,13 +62,6 @@ export async function POST(request: Request) {
         ? conversation.userBId
         : conversation.userAId;
 
-    console.log("📖 Marking messages as read:", {
-      conversationId,
-      readBy: userId,
-      notifying: otherUserId,
-      messagesUpdated: updatedMessages.count,
-    });
-
     // Trigger Pusher event to notify the SENDER that messages were read
     await pusherServer.trigger(`user-${otherUserId}`, "messages:read", {
       conversationId,

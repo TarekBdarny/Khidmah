@@ -24,9 +24,7 @@ export function useConversations(
     setConversations(initialConversations || []);
     getUserId();
   }, []);
-  useEffect(() => {
-    console.log("conversations", conversations);
-  }, [conversations]);
+
   useEffect(() => {
     if (!userId) return;
     const channel = pusherClient.subscribe(`user-${userId}`);
@@ -67,12 +65,45 @@ export function useConversations(
       }
     );
 
+    channel.bind(
+      "user:status",
+      (data: { userId: string; isOnline: boolean; lastSeen: string }) => {
+        console.log("📡 Status update received:", data);
+
+        // Update the conversation with new online status
+        setConversations((prev) =>
+          prev.map((convo) => {
+            // Check if the status update is for userA or userB
+            if (convo.userA.id === data.userId) {
+              return {
+                ...convo,
+                userA: {
+                  ...convo.userA,
+                  isOnline: data.isOnline,
+                  lastSeen: new Date(data.lastSeen),
+                },
+              };
+            }
+            if (convo.userB.id === data.userId) {
+              return {
+                ...convo,
+                userB: {
+                  ...convo.userB,
+                  isOnline: data.isOnline,
+                  lastSeen: new Date(data.lastSeen),
+                },
+              };
+            }
+            return convo;
+          })
+        );
+      }
+    );
     return () => {
-      console.log("🔌 Unsubscribing from:", `user-${userId}`);
       channel.unbind_all();
       channel.unsubscribe();
     };
   }, [userId]);
 
-  return conversations;
+  return { conversations, setConversations };
 }

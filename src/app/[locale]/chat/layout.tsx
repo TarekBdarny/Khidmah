@@ -1,10 +1,22 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import UsersSidebar from "./components/UsersSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { getLoggedUserId } from "@/actions/user.action";
 
-const ChatLayout = async ({ children }: { children: React.ReactNode }) => {
-  const loggedUserId = await getLoggedUserId();
+const ChatLayout = ({ children }: { children: React.ReactNode }) => {
+  const [loggedUserId, setLoggedUserId] = React.useState<
+    string | null | undefined
+  >(null);
+  useEffect(() => {
+    const getUserId = async () => {
+      const id = await getLoggedUserId();
+      setLoggedUserId(id);
+    };
+    getUserId();
+  }, []);
+  // useOnlineStatus(loggedUserId);
+
   return (
     <SidebarProvider>
       <main className="w-full h-full">

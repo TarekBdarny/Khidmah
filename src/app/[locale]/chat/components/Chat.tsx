@@ -6,7 +6,9 @@ import { pusherClient } from "@/lib/pusher-client";
 import { DotSquareIcon, Trash } from "lucide-react";
 import Trigger from "./Trigger";
 import { Button } from "@/components/ui/button";
-import ProfilePicture from "@/components/reuseable/avatar/ProfilePicture";
+import ProfilePictureWithStatus, {
+  ProfilePicture,
+} from "@/components/reuseable/avatar/ProfilePicture";
 import { useSidebar } from "@/components/ui/sidebar";
 import { deleteConversation, getConversation } from "@/actions/chat.action";
 import { toast } from "sonner";
@@ -16,7 +18,7 @@ import { LoadingChatMessageSkeleton, LoadingChatUserSkeleton } from "./Loaders";
 import ChatForm from "./ChatForm";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { useUserOnlineStatus } from "@/hooks/useUserOnlineStatus";
 
 export default function Chat({
   conversationId,
@@ -37,9 +39,9 @@ export default function Chat({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const markingAsRead = useRef(false);
   const otherUser =
-    conversation?.userA.id === loggedUserId
-      ? conversation?.userB
-      : conversation?.userA;
+    conversation?.userB.id === loggedUserId
+      ? conversation?.userA
+      : conversation?.userB;
   const { open } = useSidebar();
   // Scroll to bottom
 
@@ -57,8 +59,6 @@ export default function Chat({
         readBy: string;
         messages: { id: string; isRead: boolean; readAt: string }[];
       }) => {
-        console.log("📖 Messages were read:", data);
-
         if (data.conversationId === conversationId) {
           setMessages((prev) =>
             prev.map((msg) => {
@@ -103,11 +103,6 @@ export default function Chat({
     try {
       markingAsRead.current = true;
 
-      console.log(
-        "📖 Marking messages as read for conversation:",
-        conversationId
-      );
-
       const response = await fetch("/api/messages/read", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -119,7 +114,6 @@ export default function Chat({
 
       if (response.ok) {
         const data = await response.json();
-        console.log("✅ Marked as read:", data);
       }
     } catch (error) {
       console.error("Error marking messages as read:", error);
@@ -185,8 +179,6 @@ export default function Chat({
         readBy: string;
         messages: { id: string; isRead: boolean; readAt: string }[];
       }) => {
-        console.log("📖 Messages were read:", data);
-
         if (data.conversationId === conversationId) {
           setMessages((prev) =>
             prev.map((msg) => {
@@ -289,6 +281,7 @@ export default function Chat({
       setLoadingDelete(false);
     }
   };
+
   return (
     <div
       className={`${
@@ -315,8 +308,8 @@ export default function Chat({
               {otherUser?.firstName} {otherUser?.lastName}
             </p>
             <ProfilePicture
-              profilePic={otherUser?.profilePic || ""}
               fallback={getInitials(otherUser?.firstName, otherUser?.lastName)}
+              profilePic={otherUser?.profilePic || ""}
             />
 
             <Trigger />

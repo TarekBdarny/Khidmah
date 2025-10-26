@@ -42,7 +42,6 @@ const FilterBar = ({
     const fetchWorkersCity = async () => {
       const res = await getAllWorkersCities();
       setWorkersCity(res!);
-      console.log(res);
     };
     const fetchAllCategories = async () => {
       const res = await fetchCategoriesByLocale(locale);

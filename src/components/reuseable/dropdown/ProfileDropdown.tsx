@@ -1,19 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import ProfilePicture from "../avatar/ProfilePicture";
+import { ProfilePicture } from "../avatar/ProfilePicture";
 import { LogOut, Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";

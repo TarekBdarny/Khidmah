@@ -17,7 +17,6 @@ cloudinary.config({
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    console.log(formData);
     const files = formData.getAll("files") as File[];
     const userId = await getLoggedUserId();
     if (!userId)
@@ -168,12 +167,3 @@ export async function DELETE(request: NextRequest) {
     );
   }
 }
-
-// export async function POST() {
-//   console.log("🎉 Route is working!");
-//   return NextResponse.json({ message: "Hello from API!" });
-// }
-
-// export async function GET() {
-//   return NextResponse.json({ message: "GET works too!" });
-// }

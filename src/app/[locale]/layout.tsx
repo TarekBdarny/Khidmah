@@ -10,6 +10,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import DesktopNavbar from "@/components/navbars/DesktopNavbar";
 import { Toaster } from "sonner";
+import { OnlineStatusProvider } from "@/providers/OnlineStatusProvider";
 const tajawal = Tajawal({
   subsets: ["arabic"],
   weight: ["400", "500", "700"],
@@ -60,8 +61,7 @@ export default async function RootLayout({ children, params }: Props) {
                 <AppSidebar />
                 <main className="w-full max-h-screen">
                   <DesktopNavbar />
-
-                  {children}
+                  <OnlineStatusProvider>{children}</OnlineStatusProvider>
                 </main>
               </SidebarProvider>
             </ClerkProvider>
