@@ -1,14 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  ArrowDownUp,
-  ArrowUpDown,
-  Briefcase,
-  Building2,
-  Clock,
-  MapPin,
-  Search,
-} from "lucide-react";
+import { Briefcase, Building2, Clock, MapPin } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -21,19 +13,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import ProfilePicture from "@/components/reuseable/avatar/ProfilePicture";
+import { ProfilePicture } from "@/components/reuseable/avatar/ProfilePicture";
 import AttachmentsCarousel from "@/components/Carousel";
 import { useTranslations } from "next-intl";
 import RequestActionButtons from "@/components/RequestActionButtons";
 import ToolBar from "./_components/Toolbar";
 import EmptyRequests from "./_components/EmptyRequests";
+import { getLoggedUserId } from "@/actions/user.action";
+import ProfilePictureWithStatus from "@/components/reuseable/avatar/ProfilePicture";
+import { getInitials } from "@/lib/utils";
 
 type allRequests = Awaited<ReturnType<typeof getAllWorkerRequests>>;
 const page = () => {
   const [allRequests, setAllRequests] = useState<allRequests>([]);
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState<"asc" | "desc">("desc");
-
   const [status, setStatus] = useState<
     "PENDING" | "APPROVED" | "REJECTED" | "ALL"
   >("ALL");
@@ -43,6 +37,7 @@ const page = () => {
   const requestsByCompanyName = tempArray?.filter((request) =>
     request.companyName?.includes(searchedCompany)
   );
+
   const length =
     searchedCompany !== ""
       ? requestsByCompanyName?.length
@@ -126,6 +121,7 @@ const RequestByStatus = ({
 };
 const RequestCard = (props: RequestCardProps) => {
   const t = useTranslations("BecomeWorkerForm");
+
   const {
     areasOfExperience,
     id,
@@ -145,8 +141,8 @@ const RequestCard = (props: RequestCardProps) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <ProfilePicture
-              fallback="TB"
-              profilePic="https://github.com/shadcn.png"
+              fallback={getInitials(user.firstName, user.lastName)}
+              profilePic={user.profilePic || ""}
             />
             <div className="flex flex-col gap-1">
               <CardTitle>{companyName}</CardTitle>

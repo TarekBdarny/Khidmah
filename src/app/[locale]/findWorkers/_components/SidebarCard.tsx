@@ -1,4 +1,4 @@
-import ProfilePicture from "@/components/reuseable/avatar/ProfilePicture";
+import { ProfilePicture } from "@/components/reuseable/avatar/ProfilePicture";
 import { Separator } from "@/components/ui/separator";
 import { Star } from "lucide-react";
 import Link from "next/link";
@@ -16,7 +16,6 @@ interface SidebarCardProps {
 const SidebarCard = ({ id, companyName, user }: SidebarCardProps) => {
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="mb-4">Suggested Workers</h2>
       <div className="flex  items-center justify-between p-2">
         <div className="flex items-center gap-3">
           <ProfilePicture profilePic={user.profilePic || ""} fallback="TB" />

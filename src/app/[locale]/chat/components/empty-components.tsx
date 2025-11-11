@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyDescription,
@@ -12,6 +13,7 @@ import {
   UserRoundPlus,
   UserX,
 } from "lucide-react";
+import Link from "next/link";
 export const EmptyUsersDialog = ({
   searchTerm,
   length,
@@ -94,6 +96,27 @@ export const EmptyMessages = () => {
       </EmptyHeader>
       <EmptyDescription>
         <p>Start sending message and it will appear here.</p>
+      </EmptyDescription>
+    </Empty>
+  );
+};
+export const EmptyWorkers = () => {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <MessageSquare />
+        </EmptyMedia>
+        <EmptyTitle>No Workers found.</EmptyTitle>
+      </EmptyHeader>
+      <EmptyDescription className="flex flex-col gap-3">
+        <p>No workers momentarily available, try again later.</p>
+        <hr />
+        <Link href={"/becomeWorker"}>
+          <Button variant={"action"} className="w-full">
+            Become one!
+          </Button>
+        </Link>
       </EmptyDescription>
     </Empty>
   );

@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm, useFormContext } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   Select,
   SelectTrigger,
@@ -19,7 +19,13 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Field, FieldError, FieldGroup, FieldLabel } from "./ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "./ui/field";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { HelpCircle, RotateCcw, Send, X } from "lucide-react";
@@ -32,6 +38,9 @@ import { SelectGroup } from "@radix-ui/react-select";
 import FileUpload from "./FileUpload";
 import { sendWorkerRequestToSystem } from "@/actions/workerRequest.action";
 import { toast } from "sonner";
+import { WhyYouWantToWorkWithUsDialog } from "./FormDialog";
+import { fa } from "zod/v4/locales";
+import { Textarea } from "./ui/textarea";
 type categoriesType = Awaited<ReturnType<typeof fetchCategoriesByLocale>>;
 interface UploadedFile {
   id: string;
@@ -39,6 +48,7 @@ interface UploadedFile {
   fileName: string;
   fileType: string;
 }
+
 const BecomeWorkerForm = () => {
   const t = useTranslations("BecomeWorkerForm");
   // const attachmentsInputRef = useRef<HTMLInputElement | null>(null);
@@ -70,6 +80,7 @@ const BecomeWorkerForm = () => {
     endTime: z.string(),
     offDays: z.array(z.string()),
     attachments: z.array(z.file()),
+    message: z.string().optional(),
   });
   const skills = storeSkills;
   const [selectedOffDays, setSelectedOffDays] = React.useState<string[]>([]);
@@ -86,10 +97,10 @@ const BecomeWorkerForm = () => {
       startTime: "",
       endTime: "",
       offDays: [],
+      message: "",
       attachments: files,
     },
   });
-  // const { control, setValue, watch } = useFormContext();
   useEffect(() => {
     form.setValue("offDays", selectedOffDays);
   }, [selectedOffDays]);
@@ -122,7 +133,7 @@ const BecomeWorkerForm = () => {
       const data = await response.json();
       setUploadedFiles(data.attachments);
       setFiles([]);
-      alert("Files uploaded successfully!");
+      toast.success("Files uploaded successfully!");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Upload failed");
       console.error(err);
@@ -141,26 +152,26 @@ const BecomeWorkerForm = () => {
   const handleExperienceRemove = (value: string) => {
     setSelectedExperience((prev) => prev.filter((item) => item !== value));
   };
-  // const handleClick = () => {
-  //   attachmentsInputRef.current?.click();
-  // };
-  // const handleSelectFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const selectedFiles = event.target.files
-  //     ? Array.from(event.target.files)
-  //     : [];
-  //   const newFiles = [...files, ...selectedFiles];
-  //   setFiles(newFiles);
-  //   form.setValue("attachments", newFiles, { shouldValidate: true });
-  // };
-
-  // const removeFile = (index: number) => {
-  //   const newFiles = [...files];
-  //   newFiles.splice(index, 1);
-  //   setFiles(newFiles);
-  //   form.setValue("attachments", newFiles, { shouldValidate: true });
-  // };
+  const handleContinueClick = () => {
+    const { areasOfExperience, companyName, yearsOfExperience } =
+      form.getValues();
+    if (areasOfExperience.length === 0) {
+      toast.error("Please select at least one skill");
+      return false;
+    }
+    if (!companyName) {
+      toast.error("Please enter company name");
+      return false;
+    }
+    if (!yearsOfExperience) {
+      toast.error("Please enter years of experience");
+      return false;
+    }
+    return true;
+  };
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data);
+    console.log("hello");
     if (selectedExperience.length === 0) {
       toast.warning("Please select at least one skill");
       return;
@@ -177,8 +188,9 @@ const BecomeWorkerForm = () => {
       handleUpload(requestId);
     }
   };
+
   return (
-    <Card className="w-full sm:max-w-md">
+    <Card className="w-full  sm:max-w-md  mt-5 ">
       <CardHeader>
         <CardTitle>{t("title")} </CardTitle>
         <CardDescription>
@@ -187,7 +199,7 @@ const BecomeWorkerForm = () => {
           <span> {t("subTitleSecondSection")}</span>
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="">
         <form id="request-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
@@ -414,20 +426,59 @@ const BecomeWorkerForm = () => {
                 )}
               />
             </div>
+            {/* <Controller
+              name="message"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="message">
+                    Why do you want to work here? (optional)
+                  </FieldLabel>
+                  <div className="grid gap-3 relative">
+                    <FieldDescription>
+                      Provide a reason why you want to work with us{" "}
+                    </FieldDescription>
+                    <Textarea
+                      {...field}
+                      id="message"
+                      name="message"
+                      rows={5}
+                      cols={10}
+                      value={field.value}
+                      onChange={handleMessageChange}
+                      className="w-full resize-none rounded-lg pb-8 border "
+                      // defaultValue="Your website seems a good chance to earn more money"
+                    />
+                    <p className="text-xs  absolute right-2 bottom-2">
+                      <span
+                        className={`${
+                          field.value?.length && field.value?.length > 140
+                            ? "text-red-500"
+                            : "text-primary"
+                        }`}
+                      >
+                        {field.value?.length && field.value.length}
+                      </span>
+                      /150{" "}
+                    </p>
+                  </div>
+                </Field>
+              )}
+            /> */}
 
             <Controller
               name="attachments"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="attachments">choose files</FieldLabel>
-                  <FileUpload
-                    files={files}
-                    setFiles={setFiles}
-                    uploadedFiles={uploadedFiles}
-                    setUploadedFiles={setUploadedFiles}
-                  />
-                </Field>
+                <FileUpload
+                  files={files}
+                  setFiles={setFiles}
+                  uploadedFiles={uploadedFiles}
+                  setUploadedFiles={setUploadedFiles}
+                />
+                // <Field data-invalid={fieldState.invalid}>
+                //   <FieldLabel htmlFor="attachments">choose files</FieldLabel>
+                // </Field>
               )}
             />
           </FieldGroup>
@@ -443,7 +494,6 @@ const BecomeWorkerForm = () => {
           <Button type="submit" variant={"action"} form="request-form">
             {t("submit")}
             <Send />
-            <span className="sr-only"> {t("submit")}</span>
           </Button>
         </Field>
       </CardFooter>

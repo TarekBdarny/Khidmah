@@ -39,3 +39,19 @@ export function SkeletonCard() {
     </Card>
   );
 }
+export function SkeletonSidebarCard() {
+  return (
+    <Card>
+      <CardContent className="flex items-center justify-between w-full">
+        <div className="flex flex-row gap-4">
+          <Skeleton className="size-8 rounded-full" />
+          <div className="flex flex-col gap-2 ">
+            <Skeleton className="w-[150px] h-[20px]" />
+            <Skeleton className="w-[80px] h-[10px]" />
+          </div>
+        </div>
+        <Skeleton className="w-[150px] h-2" />
+      </CardContent>
+    </Card>
+  );
+}

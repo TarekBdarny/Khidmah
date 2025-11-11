@@ -3,6 +3,8 @@
 
 import { useState } from "react";
 import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { Trash } from "lucide-react";
 
 interface UploadedFile {
   id: string;
@@ -64,14 +66,14 @@ export default function FileUpload({
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+      <div className="border rounded-lg p-6">
         <Input
           type="file"
           accept="image/*,.pdf"
           multiple
           onChange={handleFileChange}
           disabled={files.length >= 3 || uploading}
-          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:cursor-pointer transition duration-300 file:text-sm file:font-semibold file:bg-muted file:text-primary hover:file:bg-primary hover:file:text-white"
         />
 
         <p className="mt-2 text-sm text-gray-500">
@@ -85,58 +87,27 @@ export default function FileUpload({
         )}
 
         {files.length > 0 && (
-          <div className="mt-4 space-y-2">
+          <div className="mt-4 space-y-2  rounded-lg">
             <h3 className="text-sm font-medium">Selected Files:</h3>
             {files.map((file, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-2 bg-gray-50 rounded"
+                className="flex items-center justify-between p-2 bg-muted  rounded"
               >
-                <span className="text-sm truncate">{file.name}</span>
-                <button
+                <Button
+                  variant={"ghost"}
                   onClick={() => removeFile(index)}
                   disabled={uploading}
                   className="ml-2 text-red-600 hover:text-red-800 text-sm"
                 >
-                  Remove
-                </button>
+                  <Trash className="w-4 h-4" />
+                </Button>
+                <span className="text-sm truncate">{file.name}</span>
               </div>
             ))}
           </div>
         )}
-
-        {/* <button
-          onClick={handleUpload}
-          disabled={files.length === 0 || uploading}
-          className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-        >
-          {uploading ? "Uploading..." : "Upload Files"}
-        </button> */}
       </div>
-
-      {uploadedFiles.length > 0 && (
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-3">Uploaded Files:</h3>
-          <div className="grid grid-cols-1 gap-3">
-            {uploadedFiles.map((file) => (
-              <div key={file.id} className="border rounded p-3">
-                <p className="text-sm font-medium">{file.fileName}</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Type: {file.fileType}
-                </p>
-                <a
-                  href={file.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline text-sm mt-2 inline-block"
-                >
-                  View File
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

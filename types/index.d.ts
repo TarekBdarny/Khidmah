@@ -8,6 +8,8 @@ interface User {
   id: string;
   firstName: string;
   lastName: string;
+  profilePic: string | null;
+  isOnline: boolean;
 }
 type RequestCardProps = {
   companyName: string | null;
