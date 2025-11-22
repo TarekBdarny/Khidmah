@@ -96,3 +96,13 @@ export const formatLastSeen = (date: Date | string | null | undefined) => {
 
   return lastSeenDate.toLocaleDateString();
 };
+export function formatDate(dateInput: Date | string | undefined): string {
+  if (!dateInput) return "";
+  const date = new Date(dateInput);
+
+  const day = date.getDate();
+  const month = date.toLocaleString("en-US", { month: "long" });
+  const year = date.getFullYear();
+
+  return `${day} ${month} ${year}`;
+}

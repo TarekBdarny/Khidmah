@@ -66,7 +66,7 @@ export function AppSidebar() {
     {
       id: "addWork",
       title: t("addWork"),
-      href: "#",
+      href: "/addWork",
       icon: Wrench,
     },
     {
