@@ -2,6 +2,7 @@
 import { getLoggedUserId } from "./user.action";
 import { prisma } from "@/lib/prisma";
 import { pusherServer } from "@/lib/pusher";
+import { revalidatePath } from "next/cache";
 
 export const getLastSpokenWithUsers = async () => {
   try {
@@ -203,6 +204,7 @@ export const deleteConversation = async (conversationId: string) => {
         conversationId: conversationId,
       }
     );
+    revalidatePath("/chat");
     return { success: true };
   } catch (error) {
     console.log("Error deleting conversation", error);

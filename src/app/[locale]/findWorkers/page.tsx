@@ -46,7 +46,9 @@ const page = () => {
     reset,
     setReset,
   };
-
+  useEffect(() => {
+    console.log(loading);
+  }, [loading]);
   useEffect(() => {
     const timer = setTimeout(() => {
       const fetchWorkers = async () => {
@@ -104,8 +106,7 @@ const page = () => {
               workers?.map((worker) => (
                 <WorkerCard key={worker.id} {...worker} />
               ))}
-            {!loading &&
-              workers?.length !== 0 &&
+            {loading &&
               Array.from({ length: 6 }).map((_, index) => (
                 <SkeletonCard key={index} />
               ))}

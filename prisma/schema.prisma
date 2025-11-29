@@ -85,12 +85,19 @@ model WorkPost {
   id          String    @id @default(cuid())
   clientId    String
   description String
-  startTime   DateTime?
-  deadline    DateTime?
-  payment     Float?
-  photos      String[]
-  location    String
+  startDate   DateTime
+  endDate    DateTime
+  payment     Float 
+  photos      Attachment[]
+  lat Float
+  lgn Float
+  city String?
+  address String
+  postalCode String?
+  workSiteLink String
   isAvailable Boolean   @default(true)
+  isUrgent    Boolean   @default(false)
+  categories  String[]
 
   client     User       @relation("ClientPosts", fields: [clientId], references: [id])
   applicants Worker[]   @relation("JobApplicants")
@@ -117,7 +124,8 @@ model Attachment {
   id String @id @unique @default(cuid())
   userId String
   publicId String
-  requestId String
+  requestId String?
+  postId String?
   name String
   size Int
   urlPath String
@@ -126,7 +134,8 @@ model Attachment {
   updatedAt     DateTime       @updatedAt
 
   user User @relation(fields: [userId] , references: [id], onDelete: Cascade)
-  request WorkerRequest @relation(fields: [requestId] , references: [id], onDelete: Cascade)
+  request WorkerRequest? @relation(fields: [requestId] , references: [id], onDelete: Cascade)
+  post WorkPost? @relation(fields: [postId] , references: [id], onDelete: Cascade)
 }
 model Category {
   id          String  @id @default(cuid())

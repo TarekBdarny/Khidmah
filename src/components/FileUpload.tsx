@@ -19,12 +19,7 @@ interface FileUploadProps {
   setUploadedFiles: React.Dispatch<React.SetStateAction<UploadedFile[]>>;
 }
 
-export default function FileUpload({
-  files,
-  setFiles,
-  uploadedFiles,
-  setUploadedFiles,
-}: FileUploadProps) {
+export default function FileUpload({ files, setFiles }: FileUploadProps) {
   //   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   //   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);

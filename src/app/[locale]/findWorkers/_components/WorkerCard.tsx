@@ -1,8 +1,7 @@
 import { addUserToChatWith } from "@/actions/chat.action";
 import { getLoggedUserId } from "@/actions/user.action";
 import { getWorkersExplicit } from "@/actions/worker.action";
-import ProfilePictureWithStatus from "@/components/reuseable/avatar/ProfilePicture";
-import ProfilePicture from "@/components/reuseable/avatar/ProfilePicture";
+import { ProfilePicture } from "@/components/reuseable/avatar/ProfilePicture";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -80,13 +79,9 @@ const WorkerCard = ({
       <CardHeader>
         <div className=" flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <ProfilePictureWithStatus
-              useCase="large"
+            <ProfilePicture
               profilePic={user.profilePic || ""}
               fallback={userInitials ?? "US"}
-              userId={user.id}
-              isOnline={user.isOnline}
-              currentUserId={loggedUserId}
             />
             <div className="flex items-center gap-2 w-fit">
               <div className="flex flex-col gap-1">
