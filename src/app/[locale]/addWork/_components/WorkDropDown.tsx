@@ -14,6 +14,7 @@ import React, { useEffect } from "react";
 import { JobPosting } from "../page";
 import { fetchCategoriesByLocale } from "@/actions/category.action";
 import { usePathname } from "next/navigation";
+import CategoryBadge from "@/components/reuseable/CategoryBadge";
 type categoriesType = Awaited<ReturnType<typeof fetchCategoriesByLocale>>;
 type DropDownProps = {
   formData: JobPosting;
@@ -77,22 +78,11 @@ const WorkDropDown = ({ formData, setFormData }: DropDownProps) => {
       {/* selected categories */}
       <div className="flex flex-wrap gap-2">
         {formData.categories.map((category, index) => (
-          <Badge
-            variant={"outline"}
+          <CategoryBadge
             key={index}
-            className="px-3 flex justify-between items-center"
-          >
-            <span>{category}</span>
-            <Button
-              type="button"
-              variant={"ghost"}
-              className="rounded-full hover:scale-105 hover:text-primary transition-all bg-transparent"
-              size={"icon-sm"}
-              onClick={() => handleRemoveCategory(category)}
-            >
-              <X className="size-3 " />
-            </Button>
-          </Badge>
+            category={category}
+            handleRemoveCategory={handleRemoveCategory}
+          />
         ))}
       </div>
     </div>

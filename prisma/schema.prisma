@@ -95,8 +95,10 @@ model WorkPost {
   photos      Attachment[]
   lat Float
   lgn Float
-  city String?
-  address String
+  cityHe    String?
+  cityAr    String?
+  addressHe String?
+  addressAr String?
   postalCode String?
   workSiteLink String
   isAvailable Boolean   @default(true)

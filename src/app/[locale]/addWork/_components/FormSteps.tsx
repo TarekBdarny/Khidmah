@@ -15,6 +15,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import WorkDropDown from "./WorkDropDown";
 import GoogleMapsLocationSelector from "./Map";
+import InputWithLabel from "@/components/reuseable/InputWithLabel";
 type FormDetailsStepProps = {
   formData: JobPosting;
   setFormData: React.Dispatch<React.SetStateAction<JobPosting>>;
@@ -29,6 +30,9 @@ export const FormDetailsStep = ({
   formData,
   setFormData,
 }: FormDetailsStepProps) => {
+  const handleDescriptionSetter = (value: string) => {
+    setFormData({ ...formData, description: value });
+  };
   return (
     <div className="space-y-8">
       {/* Job Description */}
@@ -45,6 +49,7 @@ export const FormDetailsStep = ({
           }
           className="min-h-32 resize-none"
         />
+
         <p className="text-muted-foreground text-sm">
           Be as detailed as possible to help workers understand the scope of
           work

@@ -25,6 +25,7 @@ import { JobPosting } from "../page";
 import { OnboardingData } from "../../onboarding/page";
 import { getLocale } from "next-intl/server";
 import { usePathname } from "next/navigation";
+import InputWithLabel from "@/components/reuseable/InputWithLabel";
 
 const libraries: ("places" | "geometry")[] = ["places"];
 
@@ -297,8 +298,8 @@ const GoogleMapsLocationSelector = ({
   }
 
   return (
-    <div className="max-w-4xl w-full mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">
+    <div className="max-w-4xl w-full mx-auto p-6 bg-muted/10  rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4 text-muted-foreground">
         בחר מיקום לאתר העבודה
       </h2>
 
@@ -313,17 +314,13 @@ const GoogleMapsLocationSelector = ({
               fields: ["formatted_address", "geometry", "name"],
             }}
           >
-            <input
-              type="text"
-              placeholder="חפש עיר או כתובת בישראל..."
-              className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              dir="rtl"
+            <InputWithLabel
+              labelValue="חפש עיר או כתובת בישראל..."
+              id="city-location"
+              inputType="text"
+              Icon={Search}
             />
           </Autocomplete>
-          <Search
-            className="absolute right-4 top-3.5 text-gray-400 pointer-events-none"
-            size={20}
-          />
         </div>
       </div>
 

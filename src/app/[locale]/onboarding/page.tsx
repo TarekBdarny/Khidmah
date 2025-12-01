@@ -34,8 +34,10 @@ import {
   CheckCircle,
   Home,
   LayoutDashboard,
+  Phone,
 } from "lucide-react";
 import GoogleMapsLocationSelector from "../addWork/_components/Map";
+import InputWitLabel from "@/components/reuseable/InputWithLabel";
 export interface LocationData {
   lat: number; // Latitude
   lgn: number; // Longitude
@@ -89,6 +91,12 @@ const page = () => {
   //     setData({ ...data, city: savedCity });
   //   }
   // }, []);
+  const handlePhoneNumberSetter = (value: string) => {
+    setData({ ...data, phoneNumber: value });
+  };
+  const handleAgeSetter = (value: number) => {
+    setData({ ...data, age: value });
+  };
   const formatIsraeliPhone = (phone: string) => {
     const cleaned = phone.replace(/\D/g, "");
     if (cleaned.startsWith("972")) return `+${cleaned}`;
@@ -269,39 +277,22 @@ const page = () => {
               </CardHeader>
               <CardContent className="">
                 <FieldGroup>
-                  {/* <SmartCitySelector
-                    wantedCityDispatcher={setData}
-                    phoneNumber={data.phoneNumber}
-                    age={data.age}
-                  /> */}
                   <GoogleMapsLocationSelector setData={setData} />
-                  <Field>
-                    <FieldLabel>Phone Number</FieldLabel>
-                    <Input
-                      name="phoneNumber"
-                      type="text"
-                      value={data.phoneNumber}
-                      autoComplete="off"
-                      onChange={({ target }) => {
-                        setData({ ...data, phoneNumber: target.value });
-                        setFirstError("");
-                      }}
-                    />
-                    <FieldError />
-                  </Field>
-                  <Field>
-                    <FieldLabel>Age</FieldLabel>
-                    <Input
-                      name="age"
-                      type="number"
-                      value={data.age}
-                      onChange={({ target }) => {
-                        setData({ ...data, age: +target.value });
-                        setFirstError("");
-                      }}
-                    />
-                    <FieldError />
-                  </Field>
+
+                  <InputWitLabel
+                    labelValue="Enter Phone Number"
+                    id="phoneNumber"
+                    inputType="text"
+                    placeholder="e.g. 0541234567"
+                    setterStringFunction={handlePhoneNumberSetter}
+                  />
+                  <InputWitLabel
+                    labelValue="Enter Your Age"
+                    id="age"
+                    inputType="number"
+                    placeholder="21"
+                    setterNumberFunction={handleAgeSetter}
+                  />
                 </FieldGroup>
               </CardContent>
               <CardFooter className="mt-5 flex flex-col items-start ">

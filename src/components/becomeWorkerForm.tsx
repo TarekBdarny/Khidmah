@@ -41,6 +41,7 @@ import { toast } from "sonner";
 import { WhyYouWantToWorkWithUsDialog } from "./FormDialog";
 import { fa } from "zod/v4/locales";
 import { Textarea } from "./ui/textarea";
+import CategoryBadge from "./reuseable/CategoryBadge";
 type categoriesType = Awaited<ReturnType<typeof fetchCategoriesByLocale>>;
 interface UploadedFile {
   id: string;
@@ -214,7 +215,7 @@ const BecomeWorkerForm = () => {
                     {t("companyName")}
                     <HoverCard>
                       <HoverCardTrigger>
-                        <Button variant={"ghost"}>
+                        <Button variant={"ghost"} type="button">
                           <HelpCircle />
                         </Button>
                       </HoverCardTrigger>
@@ -314,8 +315,8 @@ const BecomeWorkerForm = () => {
                     key={day}
                     className={
                       selectedOffDays.includes(day)
-                        ? "text-primary scale-105 bg-indigo-300"
-                        : "text-white scale-100"
+                        ? "scale-105 bg-primary text-white"
+                        : "scale-100"
                     }
                     onClick={() => handleDayOffClick(day)}
                   >
@@ -403,20 +404,12 @@ const BecomeWorkerForm = () => {
                       </SelectContent>
                     </Select>
                     <div className="flex flex-row flex-wrap gap-2">
-                      {selectedExperience.map((experience) => (
-                        <div
-                          className="border-1 flex items-center p-2"
-                          key={experience}
-                        >
-                          <p>{experience}</p>
-                          <Button
-                            variant={"ghost"}
-                            className="size-2"
-                            onClick={() => handleExperienceRemove(experience)}
-                          >
-                            <X />
-                          </Button>
-                        </div>
+                      {selectedExperience.map((experience, index) => (
+                        <CategoryBadge
+                          key={index}
+                          category={experience}
+                          handleRemoveCategory={handleExperienceRemove}
+                        />
                       ))}
                     </div>
                     {fieldState.invalid && (

@@ -78,7 +78,7 @@ export function AppSidebar() {
     {
       id: "dashboard",
       title: t("dashboard"),
-      href: "#",
+      href: "/dashboard",
       icon: LayoutDashboard,
     },
   ];
