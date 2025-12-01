@@ -1,17 +1,23 @@
 import { setVerified } from "@/actions/metadata.action";
 import { getLoggedUserId, updateUserInfo } from "@/actions/user.action";
+import { LocationData } from "@/app/[locale]/onboarding/page";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
-import { success } from "zod";
-
+type VerifyCodeRequestBody = {
+  phone: string;
+  code: string;
+  age: number;
+  location: LocationData;
+};
 export async function POST(request: NextRequest) {
   try {
     const { userId } = await auth();
     if (!userId)
       return NextResponse.json({ error: "User not found" }, { status: 404 });
-    const { phone, code, age, city } = await request.json();
+    const { phone, code, age, location }: VerifyCodeRequestBody =
+      await request.json();
+    console.log(location);
     if (!phone || !code) {
       return NextResponse.json(
         { error: "Phone and code are required" },
@@ -51,7 +57,11 @@ export async function POST(request: NextRequest) {
       where: { id: loggedUserId },
       data: { verified: true },
     });
-    const isUpdated = await updateUserInfo({ age, phoneNumber: phone, city });
+    const isUpdated = await updateUserInfo({
+      age,
+      phoneNumber: phone,
+      location,
+    });
     if (!isUpdated || !isUpdated?.success)
       return NextResponse.json(
         {

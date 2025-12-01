@@ -47,6 +47,8 @@ export interface JobPosting {
     city?: string;
     postalCode?: string;
   };
+  age?: number;
+  phoneNumber?: string;
 }
 const STEPS = [
   "Job Details",

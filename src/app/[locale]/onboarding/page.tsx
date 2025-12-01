@@ -35,7 +35,20 @@ import {
   Home,
   LayoutDashboard,
 } from "lucide-react";
-
+import GoogleMapsLocationSelector from "../addWork/_components/Map";
+export interface LocationData {
+  lat: number; // Latitude
+  lgn: number; // Longitude
+  address: string;
+  city?: string;
+  link?: string;
+  postalCode?: string;
+}
+export interface OnboardingData {
+  location: LocationData;
+  phoneNumber: string;
+  age: number;
+}
 const page = () => {
   const router = useRouter();
   const [value, setValue] = useState<string>("");
@@ -46,8 +59,14 @@ const page = () => {
   const [secondError, setSecondError] = useState<string>("");
   const [countdown, setCountdown] = useState(0);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [data, setData] = useState({
-    city: "",
+  const [data, setData] = useState<OnboardingData>({
+    location: {
+      address: "",
+      lat: 0,
+      lgn: 0,
+      city: "",
+      postalCode: "",
+    },
     phoneNumber: "",
     age: 0,
   });
@@ -64,12 +83,12 @@ const page = () => {
       setIsDisabled(false);
     }
   }, [countdown]);
-  useEffect(() => {
-    const savedCity = localStorage.getItem("userCity");
-    if (savedCity) {
-      setData({ ...data, city: savedCity });
-    }
-  }, []);
+  // useEffect(() => {
+  //   const savedCity = localStorage.getItem("userCity");
+  //   if (savedCity) {
+  //     setData({ ...data, city: savedCity });
+  //   }
+  // }, []);
   const formatIsraeliPhone = (phone: string) => {
     const cleaned = phone.replace(/\D/g, "");
     if (cleaned.startsWith("972")) return `+${cleaned}`;
@@ -82,23 +101,23 @@ const page = () => {
     const phoneRegex = /^(05[0-58]|9725[0-58])\d{7}$/;
     return phoneRegex.test(cleaned);
   };
-  const handleUpdate = async () => {
-    try {
-      const res = await updateUserInfo({
-        ...data,
-        phoneNumber: formatIsraeliPhone(data.phoneNumber),
-      });
-      if (!res?.success) {
-        console.log("Failed to update user");
-        return false;
-      }
-      return true;
-      //TODO: navigate to the home page or profile page
-      // router.push("/");
-    } catch (error) {}
-  };
+  // const handleUpdate = async () => {
+  //   try {
+  //     const res = await updateUserInfo({
+  //       ...data,
+  //       phoneNumber: formatIsraeliPhone(data.phoneNumber),
+  //     });
+  //     if (!res?.success) {
+  //       console.log("Failed to update user");
+  //       return false;
+  //     }
+  //     return true;
+  //     //TODO: navigate to the home page or profile page
+  //     // router.push("/");
+  //   } catch (error) {}
+  // };
   const handleFirstStep = async () => {
-    if (!data.city || !data.phoneNumber || !data.age) {
+    if (!data.location.address || !data.phoneNumber || !data.age) {
       toast.error("Please fill out all the fields");
       setFirstError("Please fill out all the fields");
       return;
@@ -201,7 +220,7 @@ const page = () => {
           phone: formatIsraeliPhone(data.phoneNumber),
           code: value,
           age: data.age,
-          city: data.city,
+          location: data.location,
         }),
       });
       const resData = await res.json();
@@ -230,9 +249,12 @@ const page = () => {
     setCountdown(30);
     setIsDisabled(true);
   };
+  useEffect(() => {
+    console.log("Onboarding Data:", data);
+  }, [data]);
 
   return (
-    <section className="h-screen flex items-center justify-center">
+    <section className="min-h-screen my-5 flex items-center justify-center  ">
       {step !== 3 ? (
         <Card className={`max-w-2xl w-full ${step === 3 ? "hidden" : "block"}`}>
           {step === 1 && (
@@ -247,11 +269,12 @@ const page = () => {
               </CardHeader>
               <CardContent className="">
                 <FieldGroup>
-                  <SmartCitySelector
+                  {/* <SmartCitySelector
                     wantedCityDispatcher={setData}
                     phoneNumber={data.phoneNumber}
                     age={data.age}
-                  />
+                  /> */}
+                  <GoogleMapsLocationSelector setData={setData} />
                   <Field>
                     <FieldLabel>Phone Number</FieldLabel>
                     <Input

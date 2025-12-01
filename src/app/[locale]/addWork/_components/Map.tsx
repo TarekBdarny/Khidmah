@@ -1,3 +1,4 @@
+"use client";
 import React, {
   useState,
   useCallback,
@@ -21,6 +22,9 @@ import {
 } from "@react-google-maps/api";
 import { Button } from "@/components/ui/button";
 import { JobPosting } from "../page";
+import { OnboardingData } from "../../onboarding/page";
+import { getLocale } from "next-intl/server";
+import { usePathname } from "next/navigation";
 
 const libraries: ("places" | "geometry")[] = ["places"];
 
@@ -51,10 +55,12 @@ interface LocationData {
   link?: string;
 }
 type GoogleMapsLocationSelectorProps = {
-  setFormData: React.Dispatch<React.SetStateAction<JobPosting>>;
+  setFormData?: React.Dispatch<React.SetStateAction<JobPosting>>;
+  setData?: Dispatch<React.SetStateAction<OnboardingData>>;
 };
 const GoogleMapsLocationSelector = ({
   setFormData,
+  setData,
 }: GoogleMapsLocationSelectorProps) => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [markerPosition, setMarkerPosition] =
@@ -66,12 +72,11 @@ const GoogleMapsLocationSelector = ({
   const [isCopied, setIsCopied] = useState(false);
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
-
+  const locale = usePathname().split("/")[1];
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey:
-      process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "YOUR_API_KEY",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
     libraries,
-    language: "he",
+    language: locale,
   });
 
   const onMapLoad = useCallback((map: google.maps.Map) => {
@@ -175,17 +180,31 @@ const GoogleMapsLocationSelector = ({
     setAutocomplete(autocompleteInstance);
   };
   useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      location: {
-        address: selectedLocation ? selectedLocation.address : "",
-        lat: selectedLocation ? selectedLocation.lat : 0,
-        lgn: selectedLocation ? selectedLocation.lng : 0,
-        city: selectedLocation?.city,
-        postalCode: prev.location.postalCode,
-      },
-      workSiteLink: generateGoogleMapsLink(),
-    }));
+    setFormData
+      ? setFormData((prev) => ({
+          ...prev,
+          location: {
+            address: selectedLocation ? selectedLocation.address : "",
+            lat: selectedLocation ? selectedLocation.lat : 0,
+            lgn: selectedLocation ? selectedLocation.lng : 0,
+            city: selectedLocation?.city,
+            postalCode: prev.location.postalCode,
+          },
+          workSiteLink: generateGoogleMapsLink(),
+        }))
+      : setData &&
+        setData((prev) => ({
+          ...prev,
+          location: {
+            address: selectedLocation ? selectedLocation.address : "",
+            lat: selectedLocation ? selectedLocation.lat : 0,
+            lgn: selectedLocation ? selectedLocation.lng : 0,
+            city: selectedLocation?.city,
+            postalCode: prev.location.postalCode,
+          },
+          phoneNumber: prev.phoneNumber,
+          age: prev.age,
+        }));
   }, [selectedLocation]);
   const onPlaceChanged = () => {
     if (autocomplete) {
@@ -278,7 +297,7 @@ const GoogleMapsLocationSelector = ({
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="max-w-4xl w-full mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">
         בחר מיקום לאתר העבודה
       </h2>
@@ -396,16 +415,18 @@ const GoogleMapsLocationSelector = ({
       )}
 
       {/* Instructions */}
-      <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <h4 className="font-semibold text-gray-800 mb-2">הוראות שימוש:</h4>
-        <ul className="text-sm text-gray-600 space-y-1" dir="rtl">
-          <li>• לחץ על הכפתור "המיקום שלי" לאיתור אוטומטי</li>
-          <li>• חפש עיר או כתובת בשורת החיפוש</li>
-          <li>• לחץ על המפה כדי לסמן מיקום</li>
-          <li>• גרור את הסמן לשינוי המיקום</li>
-          <li>• השתמש בכפתור הניווט לפתיחת מסלול ב-Google Maps</li>
-        </ul>
-      </div>
+      {setFormData && (
+        <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <h4 className="font-semibold text-gray-800 mb-2">הוראות שימוש:</h4>
+          <ul className="text-sm text-gray-600 space-y-1" dir="rtl">
+            <li>• לחץ על הכפתור "המיקום שלי" לאיתור אוטומטי</li>
+            <li>• חפש עיר או כתובת בשורת החיפוש</li>
+            <li>• לחץ על המפה כדי לסמן מיקום</li>
+            <li>• גרור את הסמן לשינוי המיקום</li>
+            <li>• השתמש בכפתור הניווט לפתיחת מסלול ב-Google Maps</li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

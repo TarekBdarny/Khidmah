@@ -3,11 +3,12 @@ import { prisma } from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { setNotVerified, setRole, setVerified } from "./metadata.action";
+import { LocationData } from "@/app/[locale]/onboarding/page";
 
 type UpdateUserInfoParams = {
   age: number;
   phoneNumber: string;
-  city: string;
+  location: LocationData;
 };
 export const registerUserToDB = async () => {
   try {
@@ -95,9 +96,10 @@ export const getLoggedUserId = async () => {
 export const updateUserInfo = async ({
   age,
   phoneNumber,
-  city,
+  location,
 }: UpdateUserInfoParams) => {
-  if (!age || !phoneNumber || !city) throw new Error("All fields are required");
+  if (!age || !phoneNumber || !location)
+    throw new Error("All fields are required");
   try {
     const { userId: clerkId } = await auth();
     if (!clerkId) return null;
@@ -111,7 +113,11 @@ export const updateUserInfo = async ({
       data: {
         age,
         phoneNumber,
-        city,
+        address: location.address,
+        lat: location.lat,
+        lgn: location.lgn,
+        city: location.city,
+        postalCode: location.postalCode,
       },
     });
     return { success: true, updatedUser };

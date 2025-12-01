@@ -15,7 +15,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import WorkDropDown from "./WorkDropDown";
 import GoogleMapsLocationSelector from "./Map";
-import FileUpload from "@/components/FileUpload";
 type FormDetailsStepProps = {
   formData: JobPosting;
   setFormData: React.Dispatch<React.SetStateAction<JobPosting>>;
@@ -211,73 +210,7 @@ export const FormLocationStep = ({
 }: FormDetailsStepProps) => {
   return (
     <div className="space-y-4">
-      {/* <div className="flex items-center gap-2">
-        <MapPin className="size-5 text-zinc-600" />
-        <Label className="">
-          Job Location <span className="text-red-500">*</span>
-        </Label>
-      </div>
-
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="address">Street Address</Label>
-          <Input
-            id="address"
-            placeholder="123 Main Street"
-            value={formData.location.address}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                location: { ...formData.location, address: e.target.value },
-              })
-            }
-          />
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-4">
-          <div>
-            <Label htmlFor="city">City</Label>
-            <Input
-              id="city"
-              placeholder="City"
-              value={formData.location.city}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  location: { ...formData.location, city: e.target.value },
-                })
-              }
-            />
-          </div>
-          <div>
-            <Label htmlFor="zipCode">Postal Code</Label>
-            <Input
-              id="zipCode"
-              placeholder="12345"
-              value={formData.location.postalCode}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  location: {
-                    ...formData.location,
-                    postalCode: e.target.value,
-                  },
-                })
-              }
-            />
-          </div>
-        </div>
-      </div> */}
       <GoogleMapsLocationSelector setFormData={setFormData} />
     </div>
-    // <div>Location Step Content Here</div>
   );
 };
-// export const FormPhotosStep = () => {
-//   const [files, setFiles] = useState<File[]>([]);
-//     const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
-//   return (
-//     <FileUpload />
-//     <div>Photos Step Content Here</div>
-//   );
-// };
