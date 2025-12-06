@@ -66,8 +66,9 @@ model Worker {
   // Relations
   ratings       Rating[]
   previousWorks PreviousWork[]
-  applicants    WorkPost[]     @relation("JobApplicants")
   savedByUsers  SavedWorkers[]
+  applications  WorkApplication[]
+  savedPosts    SavedWorkPost[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -106,7 +107,8 @@ model WorkPost {
   categories  String[]
 
   client     User       @relation("ClientPosts", fields: [clientId], references: [id])
-  applicants Worker[]   @relation("JobApplicants")
+  applications WorkApplication[]
+  savedBy      SavedWorkPost[]
   // categories Category[] @relation("WorkPostCategories")
 
   createdAt DateTime @default(now())
@@ -273,4 +275,48 @@ enum Role {
   ADMIN
   CLIENT
   WORKER
+}
+
+model SavedWorkPost {
+  id        String   @id @default(cuid())
+  userId    String   // Can be User (client) or Worker? Requirement says "workers can save the post". Assuming Worker or User acting as worker.
+                     // But wait, the prompt says "workers can save the post".
+                     // Let's link it to User or Worker. Usually saving is a User action, but let's see.
+                     // "workers can save the post". Worker model has a userId.
+                     // Let's link to Worker for now as it's specific to workers saving work posts?
+                     // Actually, let's link to User to be more generic, or Worker if strictly for workers.
+                     // The schema has `SavedWorkers` linking User and Worker.
+                     // Let's link `SavedWorkPost` to `Worker` based on "workers can save".
+                     // BUT, `Worker` is a profile. The login is `User`.
+                     // Let's link to `Worker` model to be safe with "workers".
+  workerId  String
+  postId    String
+  createdAt DateTime @default(now())
+
+  worker    Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  post      WorkPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([workerId, postId])
+}
+
+model WorkApplication {
+  id        String   @id @default(cuid())
+  workerId  String
+  postId    String
+  status    ApplicationStatus @default(PENDING)
+  proposedPrice Float? // "if the owner of the post didn't choose a price to add a price for the job"
+  message   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  worker    Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  post      WorkPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([workerId, postId])
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
